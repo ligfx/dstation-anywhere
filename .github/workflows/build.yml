@@ -1,0 +1,21 @@
+name: build_release
+
+on:
+  push: 
+    branches: [ "*" ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  # GitHub runners have two cores each
+  MAKEFLAGS: -j3
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Check out source"
+      uses: actions/checkout@v2
+    - name: "Install dependencies"
+      run: sudo apt-get update
+    - run: ./buildall.sh

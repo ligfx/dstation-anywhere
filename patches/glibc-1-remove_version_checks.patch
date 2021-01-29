@@ -1,0 +1,38 @@
+--- a/glibc-2.13/configure
++++ b/glibc-2.13/configure
+@@ -5040,10 +5040,8 @@ else
+ $as_echo_n "checking version of $CC... " >&6; }
+   ac_prog_version=`$CC -v 2>&1 | sed -n 's/^.*version \([egcygnustpi-]*[0-9.]*\).*$/\1/p'`
+   case $ac_prog_version in
+-    '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
+-    3.4* | 4.[0-9]* )
++    * )
+        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
+-    *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+ 
+   esac
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_prog_version" >&5
+@@ -5103,10 +5101,8 @@ else
+ $as_echo_n "checking version of $MAKE... " >&6; }
+   ac_prog_version=`$MAKE --version 2>&1 | sed -n 's/^.*GNU Make[^0-9]*\([0-9][0-9.]*\).*$/\1/p'`
+   case $ac_prog_version in
+-    '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
+-    3.79* | 3.[89]*)
++    *)
+        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
+-    *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+ 
+   esac
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_prog_version" >&5
+@@ -5293,10 +5289,8 @@ else
+ $as_echo_n "checking version of $SED... " >&6; }
+   ac_prog_version=`$SED --version 2>&1 | sed -n 's/^.*GNU sed version \([0-9]*\.[0-9.]*\).*$/\1/p'`
+   case $ac_prog_version in
+-    '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
+-    3.0[2-9]*|3.[1-9]*|[4-9]*)
++    *)
+        ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
+-    *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+ 
+   esac
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_prog_version" >&5

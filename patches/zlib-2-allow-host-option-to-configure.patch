@@ -1,0 +1,12 @@
+diff --git a/zlib-1.2.11/configure b/zlib-1.2.11/configure
+index 17747b66..ae31cbee 100755
+--- a/zlib-1.2.11/configure
++++ b/zlib-1.2.11/configure
+@@ -134,6 +134,7 @@ case "$1" in
+     -a*=* | --archs=*) ARCHS=`echo $1 | sed 's/.*=//'`; shift ;;
+     --sysconfdir=*) echo "ignored option: --sysconfdir" | tee -a configure.log; shift ;;
+     --localstatedir=*) echo "ignored option: --localstatedir" | tee -a configure.log; shift ;;
++    --host=*) echo "ignored option: --host" | tee -a configure.log; shift ;;
+     -c* | --const) zconst=1; shift ;;
+     -w* | --warn) warn=1; shift ;;
+     -d* | --debug) debug=1; shift ;;

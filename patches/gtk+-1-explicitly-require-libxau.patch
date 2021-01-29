@@ -1,0 +1,13 @@
+diff --git a/gtk+-1.2.10/configure b/gtk+-1.2.10/configure
+index 03719dab..343148f5 100755
+--- a/gtk+-1.2.10/configure
++++ b/gtk+-1.2.10/configure
+@@ -97,7 +97,7 @@ srcdir=
+ target=NONE
+ verbose=
+ x_includes=NONE
+-x_libraries=NONE
++x_libraries=X11 Xau
+ bindir='${exec_prefix}/bin'
+ sbindir='${exec_prefix}/sbin'
+ libexecdir='${exec_prefix}/libexec'

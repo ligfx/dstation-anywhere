@@ -1,0 +1,28 @@
+--- a/glibc-2.13/Makerules
++++ b/glibc-2.13/Makerules
+@@ -992,9 +992,9 @@ $(inst_libdir)/libc.so: $(common-objpfx)format.lds \
+ 	 echo '   Use the shared library, but some functions are only in';\
+ 	 echo '   the static library, so try that secondarily.  */';\
+ 	 cat $<; \
+-	 echo 'GROUP ( $(slibdir)/libc.so$(libc.so-version)' \
+-	      '$(libdir)/$(patsubst %,$(libtype.oS),$(libprefix)$(libc-name))'\
+-	      ' AS_NEEDED (' $(slibdir)/$(rtld-installed-name) ') )' \
++	 echo 'GROUP ( ./libc.so$(libc.so-version)' \
++	      './$(patsubst %,$(libtype.oS),$(libprefix)$(libc-name))'\
++	      ' AS_NEEDED (' ./$(rtld-installed-name) ') )' \
+ 	) > $@.new
+ 	mv -f $@.new $@
+ 
+--- a/glibc-2.13/nptl/Makefile
++++ b/glibc-2.13/nptl/Makefile
+@@ -384,8 +384,8 @@ $(inst_libdir)/libpthread.so: $(common-objpfx)format.lds \
+ 	 echo '   Use the shared library, but some functions are only in';\
+ 	 echo '   the static library, so try that secondarily.  */';\
+ 	 cat $<; \
+-	 echo 'GROUP ( $(slibdir)/libpthread.so$(libpthread.so-version)' \
+-	      '$(libdir)/$(patsubst %,$(libtype.oS),$(libprefix)pthread)'\
++	 echo 'GROUP ( ./libpthread.so$(libpthread.so-version)' \
++	      './$(patsubst %,$(libtype.oS),$(libprefix)pthread)'\
+ 	      ')' \
+ 	) > $@.new
+ 	mv -f $@.new $@

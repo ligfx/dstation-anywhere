@@ -1,0 +1,58 @@
+--- a/glibc-2.13/elf/dl-load.c
++++ b/glibc-2.13/elf/dl-load.c
+@@ -1399,10 +1399,6 @@ cannot allocate TLS data structures for initial thread");
+ #endif
+ 	__stack_prot |= PROT_READ|PROT_WRITE|PROT_EXEC;
+ 
+-#ifdef check_consistency
+-      check_consistency ();
+-#endif
+-
+       errval = (*GL(dl_make_stack_executable_hook)) (stack_endp);
+       if (errval)
+ 	{
+--- a/glibc-2.13/sysdeps/unix/sysv/linux/dl-execstack.c
++++ b/glibc-2.13/sysdeps/unix/sysv/linux/dl-execstack.c
+@@ -145,10 +145,6 @@ _dl_make_stack_executable (void **stack_endp)
+   GL(dl_stack_flags) |= PF_X;
+ 
+  out:
+-#ifdef check_consistency
+-  check_consistency ();
+-#endif
+-
+   return result;
+ }
+ rtld_hidden_def (_dl_make_stack_executable)
+--- a/glibc-2.13/sysdeps/unix/sysv/linux/i386/sysdep.h
++++ b/glibc-2.13/sysdeps/unix/sysv/linux/i386/sysdep.h
+@@ -535,29 +535,6 @@ asm (".L__X'%ebx = 1\n\t"
+ # define EXTRAVAR_5
+ #endif
+ 
+-/* Consistency check for position-independent code.  */
+-#ifdef __PIC__
+-# define check_consistency()						      \
+-  ({ int __res;								      \
+-     __asm__ __volatile__						      \
+-       ("call __i686.get_pc_thunk.cx;"					      \
+-	"addl $_GLOBAL_OFFSET_TABLE_, %%ecx;"				      \
+-	"subl %%ebx, %%ecx;"						      \
+-	"je 1f;"							      \
+-	"ud2;"								      \
+-	"1:\n"								      \
+-	".section .gnu.linkonce.t.__i686.get_pc_thunk.cx,\"ax\",@progbits;"   \
+-	".globl __i686.get_pc_thunk.cx;"				      \
+-	".hidden __i686.get_pc_thunk.cx;"				      \
+-	".type __i686.get_pc_thunk.cx,@function;"			      \
+-	"__i686.get_pc_thunk.cx:"					      \
+-	"movl (%%esp), %%ecx;"						      \
+-	"ret;"								      \
+-	".previous"							      \
+-	: "=c" (__res));						      \
+-     __res; })
+-#endif
+-
+ #endif	/* __ASSEMBLER__ */
+ 
+ 
