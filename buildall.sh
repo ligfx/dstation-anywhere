@@ -80,7 +80,7 @@ function download_patch_build() {
             cd "$dirname"
             mkdir -p build
             cd build
-            export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc --sysroot $SYSROOT -march=i686 -mtune=generic"
+            export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -isystem $cc_install_dir/include-fixed -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc --sysroot $SYSROOT -march=i686 -mtune=generic"
             export PKG_CONFIG_LIBDIR="$LIBDIR/pkgconfig:$PREFIX/share/pkgconfig"
             ../configure --prefix="$PREFIX" --host="i686-linux-gnu" $@ || ( print_config_log; false )
             make
