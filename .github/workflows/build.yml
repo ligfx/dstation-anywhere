@@ -17,5 +17,5 @@ jobs:
     - name: "Check out source"
       uses: actions/checkout@v2
     - name: "Install dependencies"
-      run: sudo apt-get update
+      run: sudo apt-get update && sudo apt-get install i686-linux-gnu-gcc
     - run: ./buildall.sh
