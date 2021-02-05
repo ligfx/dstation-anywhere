@@ -113,7 +113,7 @@ if ! test -e "$LIBDIR/libc.so"; then
         mkdir -p build
         cd build
         # cannot have sysroot and stuff because configure needs to compile executables that link against glibc. ugh.
-        export CC="${CC} -g -march=i686 -mtune=generic"
+        export CC="${CC} -g -march=i686 -mtune=generic -fno-stack-protector -U_FORTIFY_SOURCE"
         ../configure --prefix="$PREFIX" --host="i686-linux-gnu" || ( print_config_log; false )
         make
         make install
