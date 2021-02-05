@@ -20,6 +20,10 @@ if [ -z "$cc_install_dir" ]; then
     exit 1
 fi
 
+export CFLAGS=
+export CXXFLAGS=
+export LDFLAGS=
+
 function log() {
     echo -n "* "
     echo $@
@@ -76,7 +80,7 @@ function download_patch_build() {
             cd "$dirname"
             mkdir -p build
             cd build
-            export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc --sysroot $SYSROOT -march=i686"
+            export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc --sysroot $SYSROOT -march=i686 -mtune=generic"
             export PKG_CONFIG_LIBDIR="$LIBDIR/pkgconfig:$PREFIX/share/pkgconfig"
             ../configure --prefix="$PREFIX" --host="i686-linux-gnu" $@ || ( print_config_log; false )
             make
@@ -109,7 +113,7 @@ if ! test -e "$LIBDIR/libc.so"; then
         mkdir -p build
         cd build
         # cannot have sysroot and stuff because configure needs to compile executables that link against glibc. ugh.
-        export CC="${CC} -g -march=i686"
+        export CC="${CC} -g -march=i686 -mtune=generic"
         ../configure --prefix="$PREFIX" --host="i686-linux-gnu" || ( print_config_log; false )
         make
         make install
