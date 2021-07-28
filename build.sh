@@ -108,6 +108,19 @@ function should_build() {
     test -z "$module_to_build" -o "$1" = "$module_to_build"
 }
 
+# binutils for i386
+if should_build "binutils"; then
+    download_and_patch "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2"
+    (
+        cd binutils-2.21.1
+        mkdir -p build
+        cd build
+        ../configure --target="i686-linux-gnu" --prefix="$PREFIX" --disable-nls --disable-werror
+        make
+        make install
+    )
+fi
+
 # kernel headers for glibc
 if should_build "linux-headers"; then
     log "Checking linux/unistd.h..."
