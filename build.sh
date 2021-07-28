@@ -130,6 +130,9 @@ function fix_runpaths() {
         echo "$elf_files"
         IFS=$'\n'
         for f in $elf_files; do
+            if test "$(basename "$f")" = "patchelf"; then
+                continue
+            fi
             rpath=$(relative_path "$(dirname "$f")" "$HOST_PREFIX/lib")
             echo patchelf --set-rpath "$rpath" "$f"
             patchelf --set-rpath "$rpath" "$f"
