@@ -100,16 +100,10 @@ function download_patch_build() {
     fi
     
     download_and_patch "$url"
-    # cc_install_dir=$("${CC}" -print-search-dirs | grep '^install: ' | sed 's/^install: //')
-    # if [ -z "$cc_install_dir" ]; then
-    #     echo "ERROR: couldn't discover compiler install directory" >&2
-    #     exit 1
-    # fi
     (
         cd "$dirname"
         mkdir -p build
         cd build
-        # export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -isystem $cc_install_dir/include-fixed -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc -march=i686 -mtune=generic -w"
         export CC="${CC} -march=i686 -mtune=generic -w"
         export PKG_CONFIG_LIBDIR="$LIBDIR/pkgconfig:$PREFIX/share/pkgconfig"
         ../configure --prefix="$PREFIX" --host="i686-linux-gnu" $@ || ( print_config_log; false )
