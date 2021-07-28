@@ -166,7 +166,7 @@ if should_build "linux-headers"; then
     (
         cd linux-2.6.39.4
         make mrproper
-        make headers_install ARCH="i386" INSTALL_HDR_PATH="$PREFIX"
+        make headers_install ARCH="i386" INSTALL_HDR_PATH="$SYSROOT"
     )
 fi
 
@@ -182,19 +182,19 @@ if should_build "glibc_bootstrap"; then
         export CC="${CC} -g -march=i686 -mtune=generic -U_FORTIFY_SOURCE -w"
         # add libc_cv_forced_unwind=yes, libc_cv_c_cleanup=yes, and libc_cv_ctors_header=yes
         # because the test executables will fail to link, since we don't have libc yet! stupid
-        ../configure --prefix="$PREFIX" --host="i686-linux-gnu" --disable-multilib \
+        ../configure --prefix="$SYSROOT" --host="i686-linux-gnu" --disable-multilib \
             libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes libc_cv_ctors_header=yes \
             || ( print_config_log; false )
         # headers
         make install-bootstrap-headers=yes install-headers
         # startup files
         make csu/subdir_lib
-        install csu/crt1.o csu/crti.o csu/crtn.o "$LIBDIR"
+        install csu/crt1.o csu/crti.o csu/crtn.o "$SYSROOT/lib"
         # dummy files
-        if ! test -e "$LIBDIR/libc.so"; then
-            i686-linux-gnu-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o "$LIBDIR/libc.so"
+        if ! test -e "$SYSROOT/lib/libc.so"; then
+            i686-linux-gnu-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o "$SYSROOT/lib/libc.so"
         fi
-        touch "$INCLUDEDIR/gnu/stubs.h"
+        touch "$SYSROOT/include/gnu/stubs.h"
     )
 fi
 
