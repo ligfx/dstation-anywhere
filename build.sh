@@ -10,8 +10,10 @@ export MAKEFLAGS=$(( $(nproc || echo 2) + 1 ))
 
 HOST_SYSROOT="$topdir/host_sysroot"
 HOST_PREFIX="$HOST_SYSROOT/usr"
+HOST_BIN="$HOST_PREFIX/bin"
 HOST_INCLUDEDIR="$HOST_PREFIX/include"
 HOST_LIBDIR="$HOST_PREFIX/lib"
+export PATH="$HOST_BIN:$PATH"
 
 SYSROOT="$topdir/sysroot"
 PREFIX="$SYSROOT/usr"
@@ -150,9 +152,9 @@ function should_build() {
 #         cd gcc-4.5.2
 #         ./configure --target="i386-linux-gnu" --prefix="$HOST_PREFIX" \
 #             --disable-nls --disable-libmudflap --disable-libssp --disable-libgomp \
-#             --enable-languages=c,c++ --disable-multilib --without-ppl --without-cloog \
-#             --enable-clocale=gnu --enable-threads=posix --enable-__cxa_atexit \
-#             --disable-libstdcxx-pch --disable-bootstrap --with-gmp="$HOST_PREFIX" \
+#             --enable-languages=c --disable-multilib --without-ppl --without-cloog \
+#             --enable-clocale=gnu --enable-threads=posix \
+#             --disable-bootstrap --with-gmp="$HOST_PREFIX" \
 #             --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX"
 #         make
 #         make install
