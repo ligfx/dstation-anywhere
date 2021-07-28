@@ -21,6 +21,7 @@ jobs:
     - run: ./build.sh host_zlib
     - run: ./build.sh host_libxml2
     - run: ./build.sh host_libxslt
+    - run: ./build.sh host_patchelf
     - run: ./build.sh linux-headers
     - run: ./build.sh glibc
     - run: ./build.sh zlib

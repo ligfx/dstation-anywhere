@@ -159,10 +159,13 @@ function should_build() {
 #     )
 # fi
 
-# need xsltproc for libxcb
+# xsltproc (for libxcb)
 download_patch_build_host "https://zlib.net/zlib-1.2.11.tar.gz"
 download_patch_build_host "http://xmlsoft.org/sources/libxml2-2.9.12.tar.gz" --without-python
 download_patch_build_host "http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz" --without-python
+
+# patchelf
+download_patch_build_host "https://github.com/NixOS/patchelf/releases/download/0.12/patchelf-0.12.tar.bz2"
 
 # kernel headers for glibc
 if should_build "linux-headers"; then
