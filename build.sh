@@ -182,7 +182,29 @@ if should_build "linux-headers"; then
     fi
 fi
 
-# glibc
+# glibc_bootstrap
+if should_build "glibc_bootstrap"; then
+    download_and_patch "https://ftp.gnu.org/gnu/libc/glibc-2.13.tar.bz2"
+    (
+        cd glibc-2.13
+        mkdir -p build
+        cd build
+        # cannot have sysroot and stuff because configure needs to compile executables that link against glibc. ugh.
+        export CC="${CC} -g -march=i686 -mtune=generic -fno-stack-protector -U_FORTIFY_SOURCE"
+        ../configure --prefix="$PREFIX" --host="i686-linux-gnu" || ( print_config_log; false )
+        # headers
+        make install-bootstrap-headers=yes install-headers
+        # startup files
+        make csu/subdir_lib
+        install csu/crt1.o csu/crti.o csu/crtn.o "$LIBDIR"
+        # dummy files
+        if ! test -e "$LIBDIR/libc.so"; then
+            i386-linux-gnu-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o "$LIBDIR/libc.so"
+        fi
+        touch "$INCLUDEDIR/gnu/stubs.h"
+    )
+fi
+
 if should_build "glibc"; then
     log "Checking libc.so..."
     if ! test -e "$LIBDIR/libc.so"; then
