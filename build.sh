@@ -16,7 +16,7 @@ HOST_LIBDIR="$HOST_PREFIX/lib"
 export PATH="$HOST_BIN:$PATH"
 export LD_LIBRARY_PATH="$HOST_LIBDIR" # fixes error with gcc missing mpfr
 
-SYSROOT="$topdir/toolchain/i686-linux-gnu/sysroot"
+SYSROOT="$HOST_PREFIX/i686-linux-gnu/sysroot"
 PREFIX="$SYSROOT/usr"
 INCLUDEDIR="$PREFIX/include"
 LIBDIR="$PREFIX/lib"
@@ -176,9 +176,14 @@ if should_build "glibc_bootstrap"; then
         cd glibc-2.13
         mkdir -p build
         cd build
-        # cannot have sysroot and stuff because configure needs to compile executables that link against glibc. ugh.
+        # cannot have sysroot and stuff because configure needs to compile executables that
+        # link against glibc. ugh.
         export CC="${CC} -g -march=i686 -mtune=generic -fno-stack-protector -U_FORTIFY_SOURCE -w"
-        ../configure --prefix="$PREFIX" --host="i686-linux-gnu" --disable-multilib libc_cv_forced_unwind=yes || ( print_config_log; false )
+        # add libc_cv_forced_unwind=yes, libc_cv_c_cleanup=yes, and libc_cv_ctors_header=yes
+        # because the test executables will fail to link, since we don't have libc yet! stupid
+        ../configure --prefix="$PREFIX" --host="i686-linux-gnu" --disable-multilib \
+            libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes libc_cv_ctors_header=yes \
+            || ( print_config_log; false )
         # headers
         make install-bootstrap-headers=yes install-headers
         # startup files
