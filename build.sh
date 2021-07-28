@@ -267,7 +267,7 @@ if should_build "lc2e"; then
             log "Unpacking dockingstation_195_64..."
             rm -fr "dsbuild 195" ports cdtastic Readme.txt dstation-install
             find . -name '*.bz2' -exec bunzip2 {} \;
-            rm Readme.txt dstation-install
+            rm Readme.txt dstation-install libSDL-1.2.so.0
             for d in Backgrounds Images "Overlay Data" Sounds; do
             ( cd "$d" && for f in *; do test "$f" == "${f,,}" || mv "$f" "${f,,}"; done )
             done
@@ -286,6 +286,11 @@ if should_build "lc2e"; then
     libs=$(LD_LIBRARY_PATH="$LIBDIR:$topdir/dockingstation_195_64" ldd "$topdir/dockingstation_195_64/lc2e" | grep "=>" | sed 's/^.*=>//g' | sed 's/(0x[a-f0-9]\+)$//g')
     mkdir -p "dockingstation_195_64/lib32"
     cp "$LIBDIR/ld-linux.so.2" "dockingstation_195_64/lib32"
+    # cp "$LIBDIR"/libc.so.* "dockingstation_195_64/lib32"
+    # cp "$LIBDIR"/libdl.so.* "dockingstation_195_64/lib32"
+    # cp "$LIBDIR"/libm.so.* "dockingstation_195_64/lib32"
+    # cp "$LIBDIR"/libpthread.so.* "dockingstation_195_64/lib32"
+    # cp "$LIBDIR"/librt.so.* "dockingstation_195_64/lib32"
     for f in $libs; do
         if [[ "$f" == "$LIBDIR"/* ]]; then
             cp "$f" "dockingstation_195_64/lib32"
@@ -296,16 +301,6 @@ if should_build "lc2e"; then
             exit 1
         fi
     done
-
-    log "Bundling lib32_glibc..."
-    rm -fr "dockingstation_195_64/lib32_glibc"
-    mkdir -p "dockingstation_195_64/lib32_glibc"
-    mv dockingstation_195_64/lib32{,_glibc}/ld-linux.so.2
-    mv dockingstation_195_64/lib32{,_glibc}/libc.so.*
-    mv dockingstation_195_64/lib32{,_glibc}/libdl.so.*
-    mv dockingstation_195_64/lib32{,_glibc}/libm.so.*
-    mv dockingstation_195_64/lib32{,_glibc}/libpthread.so.*
-    mv dockingstation_195_64/lib32{,_glibc}/librt.so.*
 
     log "Finding libgcc_s.so..."
     (
@@ -319,11 +314,11 @@ if should_build "lc2e"; then
         fi
         echo "${libgcc_s_path}"
         # TODO: check for bad glibc versions (or do we? can't be worse than the SIGABRT when it's missing...)
-        cp "${libgcc_s_path}" "$topdir/dockingstation_195_64/lib32_glibc/"
+        cp "${libgcc_s_path}" "$topdir/dockingstation_195_64/lib32/"
     )
 
     log "Fixing rpaths..."
-    for f in dockingstation_195_64/lib32/* dockingstation_195_64/lib32_glibc/*; do
+    for f in dockingstation_195_64/lib32/*; do
         rpath=$(patchelf --print-rpath "$f")
         if [[ "$rpath" == /* ]]; then
             patchelf --remove-rpath "$f"
