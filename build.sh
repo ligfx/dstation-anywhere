@@ -6,7 +6,7 @@ set -euo pipefail
 topdir=$( cd "$(dirname "$0")" && pwd -P)
 echo "topdir: $topdir"
 
-export MAKEFLAGS=$(( $(nproc || echo 2) + 1 ))
+export MAKEFLAGS=$(( $(nproc || echo 2) + 2 ))
 
 HOST_PREFIX="$topdir/toolchain/usr"
 export PATH="$HOST_PREFIX/bin:$PATH"
