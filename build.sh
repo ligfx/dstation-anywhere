@@ -142,7 +142,7 @@ if should_build "mpfr"; then
     download_and_patch "https://ftp.gnu.org/gnu/mpfr/mpfr-3.0.1.tar.bz2"
     (
         cd mpfr-3.0.1
-        ./configure --prefix="$HOST_PREFIX"
+        ./configure --prefix="$HOST_PREFIX" --with-gmp="$HOST_PREFIX"
         make
         make install
     )
@@ -153,7 +153,23 @@ if should_build "mpc"; then
     download_and_patch "https://ftp.gnu.org/gnu/mpc/mpc-0.8.2.tar.bz2"
     (
         cd mpc-0.8.2
-        ./configure --prefix="$HOST_PREFIX"
+        ./configure --prefix="$HOST_PREFIX" --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX"
+        make
+        make install
+    )
+fi
+
+# gcc for i386
+if should_build "gcc"; then
+    download_and_patch "https://ftp.gnu.org/gnu/gcc/gcc-4.5.2.tar.bz2"
+    (
+        cd gcc-4.5.2
+        ./configure --target="i386-linux-gnu" --prefix="$HOST_PREFIX" \
+            --disable-nls --disable-libmudflap --disable-libssp --disable-libgomp \
+            --enable-languages=c,c++ --disable-multilib --without-ppl --without-cloog \
+            --enable-clocale=gnu --enable-threads=posix --enable-__cxa_atexit \
+            --disable-libstdcxx-pch --disable-bootstrap --with-gmp="$HOST_PREFIX" \
+            --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX"
         make
         make install
     )
