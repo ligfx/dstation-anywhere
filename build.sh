@@ -16,7 +16,7 @@ PREFIX="$SYSROOT/usr"
 INCLUDEDIR="$PREFIX/include"
 LIBDIR="$PREFIX/lib"
 
-CC="i686-linux-gnu-gcc"
+CC="LD_LIBRARY_PATH=\"$HOST_PREFIX/lib\" i686-linux-gnu-gcc"
 
 export CFLAGS=
 export CXXFLAGS=
@@ -80,9 +80,7 @@ function download_patch_build_host() {
         cd "$dirname"
         mkdir -p build_host
         cd build_host
-        ../configure LDFLAGS="-Wl,-R,\"$HOST_PREFIX/lib\" -Wl,--enable-new-dtags" \
-            CFLAGS="-w" --prefix="$HOST_PREFIX" $@ \
-            || ( print_config_log; false )
+        ../configure CFLAGS="-w" --prefix="$HOST_PREFIX" $@ || ( print_config_log; false )
         make
         make install
     )
