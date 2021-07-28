@@ -152,7 +152,7 @@ if should_build "host_gcc"; then
         ./configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" \
             --enable-languages=c --disable-multilib --disable-nls \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
-            --with-sysroot="$SYSROOT" \
+            --with-sysroot="$SYSROOT" --with-native-system-header-dir="/include" \
             # --enable-clocale=gnu --enable-threads=posix \
             # --disable-bootstrap \
         make all-gcc
