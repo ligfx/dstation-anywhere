@@ -14,6 +14,7 @@ HOST_BIN="$HOST_PREFIX/bin"
 HOST_INCLUDEDIR="$HOST_PREFIX/include"
 HOST_LIBDIR="$HOST_PREFIX/lib"
 export PATH="$HOST_BIN:$PATH"
+export LD_LIBRARY_PATH="$HOST_LIBDIR" # fixes error with gcc missing mpfr
 
 SYSROOT="$topdir/sysroot"
 PREFIX="$SYSROOT/usr"
