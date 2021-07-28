@@ -57,3 +57,10 @@ jobs:
       with:
         name: dstation-anywhere-${{ steps.vars.outputs.sha_short }}
         path: dockingstation_195_64
+    - uses: actions/upload-artifact@v1
+      if: always()
+      with:
+        name: toolchain
+        path: |
+          sysroot
+          host_sysroot
