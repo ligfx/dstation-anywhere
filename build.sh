@@ -53,7 +53,8 @@ function download_and_patch() {
             cd tmp
             wget --no-verbose "$url" -O "$filename"
             log "Extracting ${filename}..."
-            tar xf "${filename}"
+            mkdir "${dirname}"
+            tar xf "${filename}" -C "${dirname}" --strip-components=1
             rm "${filename}"
             if test "$(echo "$topdir/patches/${patchname}"-*)" != "$topdir/patches/${patchname}-*"; then
                 for f in "$topdir/patches/${patchname}"-*; do
