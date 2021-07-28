@@ -205,6 +205,17 @@ if should_build "glibc_bootstrap"; then
     )
 fi
 
+# libgcc
+if should_build "libgcc"; then
+    (
+        cd gcc-4.5.2
+        make all-target-libgcc
+        make install-target-libgcc
+        # static libraries libgcc.a and libgcc_eh.a go to $HOST_PREFIX/lib/gcc/i386-linux-gnu/4.5.2
+        # shared library libgcc_s.so goes to $HOST_PREFIX/i386-linux-gnu/lib
+    )
+fi
+
 if should_build "glibc"; then
     log "Checking libc.so..."
     if ! test -e "$LIBDIR/libc.so"; then
