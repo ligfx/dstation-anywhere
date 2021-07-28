@@ -138,11 +138,11 @@ function should_build() {
     test -z "$module_to_build" -o "$1" = "$module_to_build"
 }
 
-# binutils for i386
+# binutils for i686
 download_patch_build_host "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2" \
-   --target="i386-linux-gnu" --disable-nls --disable-werror --disable-multilib
+   --target="i686-linux-gnu" --disable-nls --disable-werror --disable-multilib
 
-# gcc for i386
+# gcc for i686
 download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-6.0.0a.tar.bz2"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpfr/mpfr-3.1.2.tar.bz2" --with-gmp="$HOST_PREFIX"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz" --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX"
@@ -150,7 +150,7 @@ if should_build "host_gcc"; then
     download_and_patch "https://ftp.gnu.org/gnu/gcc/gcc-4.9.2/gcc-4.9.2.tar.bz2"
     (
         cd gcc-4.9.2
-        ./configure --target="i386-linux-gnu" --prefix="$HOST_PREFIX" \
+        ./configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" \
             --enable-languages=c --disable-multilib \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
             # --enable-clocale=gnu --enable-threads=posix \
@@ -168,7 +168,7 @@ if should_build "linux-headers"; then
         (
             cd linux-2.6.39.4
             make mrproper
-            make headers_install ARCH="i386" INSTALL_HDR_PATH="$PREFIX"
+            make headers_install ARCH="i686" INSTALL_HDR_PATH="$PREFIX"
         )
     fi
 fi
@@ -190,7 +190,7 @@ if should_build "glibc_bootstrap"; then
         install csu/crt1.o csu/crti.o csu/crtn.o "$LIBDIR"
         # dummy files
         if ! test -e "$LIBDIR/libc.so"; then
-            i386-linux-gnu-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o "$LIBDIR/libc.so"
+            i686-linux-gnu-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o "$LIBDIR/libc.so"
         fi
         touch "$INCLUDEDIR/gnu/stubs.h"
     )
@@ -202,8 +202,8 @@ if should_build "libgcc"; then
         cd gcc-4.9.2
         make all-target-libgcc
         make install-target-libgcc
-        # static libraries libgcc.a and libgcc_eh.a go to $HOST_PREFIX/lib/gcc/i386-linux-gnu/4.5.2
-        # shared library libgcc_s.so goes to $HOST_PREFIX/i386-linux-gnu/lib
+        # static libraries libgcc.a and libgcc_eh.a go to $HOST_PREFIX/lib/gcc/i686-linux-gnu/4.5.2
+        # shared library libgcc_s.so goes to $HOST_PREFIX/i686-linux-gnu/lib
     )
 fi
 
