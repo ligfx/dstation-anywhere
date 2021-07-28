@@ -241,10 +241,13 @@ download_patch_build "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.2
 download_patch_build "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-14.2.tar.gz" \
     --enable-memfd=no --without-caps --disable-glib2
     
-# SDL with pulseaudio support
+# rebuild SDL with pulseaudio support
 download_patch_build "https://libsdl.org/release/SDL-1.2.15.tar.gz" \
      --with-x --enable-alsa=yes --enable-alsa-shared=no --enable-pulseaudio=yes \
      --enable-pulseaudio-shared=no
+
+# rebuild SDL_mixer for consistency
+download_patch_build "https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12.tar.gz"
 
 # patchelf
 download_patch_build_host "https://github.com/NixOS/patchelf/releases/download/0.12/patchelf-0.12.tar.bz2"
@@ -268,7 +271,7 @@ if should_build "lc2e"; then
             log "Unpacking dockingstation_195_64..."
             rm -fr "dsbuild 195" ports cdtastic Readme.txt dstation-install
             find . -name '*.bz2' -exec bunzip2 {} \;
-            rm Readme.txt dstation-install libSDL-1.2.so.0
+            rm Readme.txt dstation-install libSDL-1.2.so.0 libSDL_mixer-1.2.so.0
             for d in Backgrounds Images "Overlay Data" Sounds; do
                 # lowercase the filenames
                 ( cd "$d" && for f in *; do test "$f" == "${f,,}" || mv "$f" "${f,,}"; done )
