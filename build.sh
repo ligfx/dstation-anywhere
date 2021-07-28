@@ -216,21 +216,13 @@ if should_build "libgcc"; then
     )
 fi
 
-if should_build "glibc"; then
-    log "Checking libc.so..."
-    if ! test -e "$LIBDIR/libc.so"; then
-        download_and_patch "https://ftp.gnu.org/gnu/libc/glibc-2.13.tar.bz2"
-        (
-            cd glibc-2.13
-            mkdir -p build
-            cd build
-            # cannot have sysroot and stuff because configure needs to compile executables that link against glibc. ugh.
-            export CC="${CC} -g -march=i686 -mtune=generic -fno-stack-protector -U_FORTIFY_SOURCE"
-            ../configure --prefix="$PREFIX" --host="i686-linux-gnu" || ( print_config_log; false )
-            make
-            make install
-        )
-    fi
+# glibc_final
+if should_build "glibc_final"; then
+    (
+        cd glibc-2.13/build
+        make
+        make install
+    )
 fi
 
 # zlib
