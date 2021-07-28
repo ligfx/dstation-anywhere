@@ -99,11 +99,11 @@ function download_patch_build() {
     fi
     
     download_and_patch "$url"
-    cc_install_dir=$("${CC}" -print-search-dirs | grep '^install: ' | sed 's/^install: //')
-    if [ -z "$cc_install_dir" ]; then
-        echo "ERROR: couldn't discover compiler install directory" >&2
-        exit 1
-    fi
+    # cc_install_dir=$("${CC}" -print-search-dirs | grep '^install: ' | sed 's/^install: //')
+    # if [ -z "$cc_install_dir" ]; then
+    #     echo "ERROR: couldn't discover compiler install directory" >&2
+    #     exit 1
+    # fi
     (
         cd "$dirname"
         mkdir -p build
