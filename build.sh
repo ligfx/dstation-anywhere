@@ -185,15 +185,15 @@ if should_build "glibc_bootstrap"; then
         # headers
         make install-bootstrap-headers=yes install-headers
         install bits/stdio_lim.h "$INCLUDEDIR/bits"
+        touch "$INCLUDEDIR/gnu/stubs.h"
         # startup files
         make csu/subdir_lib
         mkdir -p "$LIBDIR"
         install csu/crt1.o csu/crti.o csu/crtn.o "$LIBDIR"
-        # dummy files
+        # dummy libc that libgcc can link against
         if ! test -e "$LIBDIR/libc.so"; then
             i686-linux-gnu-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o "$LIBDIR/libc.so"
         fi
-        touch "$INCLUDEDIR/gnu/stubs.h"
     )
 fi
 
