@@ -84,7 +84,7 @@ function download_patch_build_host() {
         cd "$dirname"
         mkdir -p build_host
         cd build_host
-        ../configure --prefix="$HOST_PREFIX" $@ || ( print_config_log; false )
+        ../configure --prefix="$HOST_PREFIX" CFLAGS="-w" $@ || ( print_config_log; false )
         make
         make install
     )
@@ -112,7 +112,7 @@ function download_patch_build() {
         cd "$dirname"
         mkdir -p build
         cd build
-        export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -isystem $cc_install_dir/include-fixed -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc --sysroot $SYSROOT -march=i686 -mtune=generic -fno-stack-protector"
+        export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -isystem $cc_install_dir/include-fixed -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc --sysroot $SYSROOT -march=i686 -mtune=generic -fno-stack-protector -w"
         export PKG_CONFIG_LIBDIR="$LIBDIR/pkgconfig:$PREFIX/share/pkgconfig"
         ../configure --prefix="$PREFIX" --host="i686-linux-gnu" $@ || ( print_config_log; false )
         make
@@ -150,6 +150,7 @@ if should_build "host_gcc"; then
         ./configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" \
             --enable-languages=c --disable-multilib \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
+            CFLAGS="-w" \
             # --enable-clocale=gnu --enable-threads=posix \
             # --disable-bootstrap \
         make all-gcc
@@ -175,7 +176,7 @@ if should_build "glibc_bootstrap"; then
         mkdir -p build
         cd build
         # cannot have sysroot and stuff because configure needs to compile executables that link against glibc. ugh.
-        export CC="${CC} -g -march=i686 -mtune=generic -fno-stack-protector -U_FORTIFY_SOURCE"
+        export CC="${CC} -g -march=i686 -mtune=generic -fno-stack-protector -U_FORTIFY_SOURCE -w"
         ../configure --prefix="$PREFIX" --host="i686-linux-gnu" || ( print_config_log; false )
         # headers
         make install-bootstrap-headers=yes install-headers
