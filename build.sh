@@ -148,6 +148,17 @@ if should_build "mpfr"; then
     )
 fi
 
+# mpc for i386
+if should_build "mpc"; then
+    download_and_patch "https://ftp.gnu.org/gnu/mpc/mpc-0.8.2.tar.bz2"
+    (
+        cd mpc-0.8.2
+        ./configure --prefix="$HOST_PREFIX"
+        make
+        make install
+    )
+fi
+
 # kernel headers for glibc
 if should_build "linux-headers"; then
     log "Checking linux/unistd.h..."

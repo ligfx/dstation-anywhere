@@ -21,6 +21,7 @@ jobs:
     - run: ./build.sh binutils
     - run: ./build.sh gmp
     - run: ./build.sh mpfr
+    - run: ./build.sh mpc
     - run: ./build.sh linux-headers
     - run: ./build.sh glibc
     - run: ./build.sh zlib
