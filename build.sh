@@ -148,7 +148,7 @@ if should_build "linux-headers"; then
 fi
 
 # gcc for i686
-download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-6.0.0a.tar.bz2"
+download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-6.1.0.tar.bz2"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpfr/mpfr-3.1.2.tar.bz2" --with-gmp="$HOST_PREFIX"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz" --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX"
 if should_build "host_gcc"; then
