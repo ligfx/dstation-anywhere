@@ -167,7 +167,7 @@ if should_build "linux-headers"; then
     (
         cd linux-2.6.39.4
         make mrproper
-        make headers_install ARCH="i686" INSTALL_HDR_PATH="$PREFIX"
+        make headers_install ARCH="i386" INSTALL_HDR_PATH="$PREFIX"
     )
 fi
 
