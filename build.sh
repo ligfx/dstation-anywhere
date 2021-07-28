@@ -219,7 +219,7 @@ download_patch_build "libICE.so" "https://www.x.org/releases/individual/lib/libI
 download_patch_build "libSM.so" "https://www.x.org/releases/individual/lib/libSM-1.2.0.tar.bz2"
 download_patch_build "libXau.so" "https://www.x.org/releases/individual/lib/libXau-1.0.6.tar.bz2"
 download_patch_build "libxcb.so" \
-    "https://www.x.org/releases/individual/xcb/libxcb-1.7.tar.bz2" \
+    "https://www.x.org/releases/individual/xcb/libxcb-1.9.1.tar.bz2" \
     --enable-xinput
 download_patch_build "libX11.so" "https://www.x.org/releases/individual/lib/libX11-1.4.99.1.tar.bz2"
 download_patch_build "libXt.so" "https://www.x.org/releases/individual/lib/libXt-1.1.1.tar.bz2"
