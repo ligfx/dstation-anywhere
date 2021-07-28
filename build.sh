@@ -80,8 +80,9 @@ function download_patch_build_host() {
         cd "$dirname"
         mkdir -p build_host
         cd build_host
-        ../configure --prefix="$HOST_PREFIX" CFLAGS="-w" LDFLAGS="-Wl,-R,\"$HOST_PREFIX/lib\" -Wl,--enable-new-dtags"
- $@ || ( print_config_log; false )
+        ../configure LDFLAGS="-Wl,-R,\"$HOST_PREFIX/lib\" -Wl,--enable-new-dtags" \
+            CFLAGS="-w" --prefix="$HOST_PREFIX" $@ \
+            || ( print_config_log; false )
         make
         make install
     )
