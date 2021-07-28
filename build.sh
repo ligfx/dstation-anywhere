@@ -8,6 +8,11 @@ echo "topdir: $topdir"
 
 export MAKEFLAGS=$(( $(nproc || echo 2) + 1 ))
 
+HOST_SYSROOT="$topdir/host_sysroot"
+HOST_PREFIX="$HOST_SYSROOT/usr"
+HOST_INCLUDEDIR="$HOST_PREFIX/include"
+HOST_LIBDIR="$HOST_PREFIX/lib"
+
 SYSROOT="$topdir/sysroot"
 PREFIX="$SYSROOT/usr"
 INCLUDEDIR="$PREFIX/include"
@@ -115,7 +120,29 @@ if should_build "binutils"; then
         cd binutils-2.21.1
         mkdir -p build
         cd build
-        ../configure --target="i686-linux-gnu" --prefix="$PREFIX" --disable-nls --disable-werror
+        ../configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" --disable-nls --disable-werror
+        make
+        make install
+    )
+fi
+
+# gmp for i386
+if should_build "gmp"; then
+    download_and_patch "https://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.bz2"
+    (
+        cd gmp-5.0.1
+        ./configure --prefix="$HOST_PREFIX"
+        make
+        make install
+    )
+fi
+
+# mpfr for i386
+if should_build "mpfr"; then
+    download_and_patch "https://ftp.gnu.org/gnu/mpfr/mpfr-3.0.1.tar.bz2"
+    (
+        cd mpfr-3.0.1
+        ./configure --prefix="$HOST_PREFIX"
         make
         make install
     )

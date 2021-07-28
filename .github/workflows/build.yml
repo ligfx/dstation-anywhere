@@ -19,6 +19,8 @@ jobs:
     - name: "Install dependencies"
       run: sudo apt-get update && sudo apt-get install gcc-i686-linux-gnu
     - run: ./build.sh binutils
+    - run: ./build.sh gmp
+    - run: ./build.sh mpfr
     - run: ./build.sh linux-headers
     - run: ./build.sh glibc
     - run: ./build.sh zlib
