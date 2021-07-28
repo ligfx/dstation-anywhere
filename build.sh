@@ -139,9 +139,9 @@ function should_build() {
     test -z "$module_to_build" -o "$1" = "$module_to_build"
 }
 
-# # toolchain for i386
+# binutils for i386
 download_patch_build_host "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2" \
-   --target="i386-linux-gnu" --disable-nls --disable-werror
+   --target="i386-linux-gnu" --disable-nls --disable-werror --disable-multilib
 download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.bz2"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpfr/mpfr-3.0.1.tar.bz2" --with-gmp="$HOST_PREFIX"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.bz2" --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX"

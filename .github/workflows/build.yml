@@ -19,6 +19,8 @@ jobs:
     - name: "Install dependencies"
       run: sudo apt-get update && sudo apt-get install gcc-i686-linux-gnu
     - run: ./build.sh host_binutils
+    - run: host_sysroot/usr/bin/ld --verbose
+    - run: false
     - run: ./build.sh host_gmp
     - run: ./build.sh host_mpfr
     - run: ./build.sh host_mpc
