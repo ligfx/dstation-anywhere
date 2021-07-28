@@ -141,6 +141,16 @@ download_patch_build_host "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.
    --target="i686-linux-gnu" --disable-nls --disable-werror --disable-multilib \
    --with-sysroot="$SYSROOT"
 
+# kernel headers for gcc and glibc
+if should_build "linux-headers"; then
+   download_and_patch "https://mirrors.edge.kernel.org/pub/linux/kernel/v2.6/linux-2.6.39.4.tar.bz2"
+   (
+       cd linux-2.6.39.4
+       make mrproper
+       make headers_install ARCH="i386" INSTALL_HDR_PATH="$SYSROOT"
+   )
+fi
+
 # gcc for i686
 download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-6.0.0a.tar.bz2"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpfr/mpfr-3.1.2.tar.bz2" --with-gmp="$HOST_PREFIX"
@@ -157,16 +167,6 @@ if should_build "host_gcc"; then
             # --disable-bootstrap \
         make all-gcc
         make install-gcc
-    )
-fi
-
-# kernel headers for glibc
-if should_build "linux-headers"; then
-    download_and_patch "https://mirrors.edge.kernel.org/pub/linux/kernel/v2.6/linux-2.6.39.4.tar.bz2"
-    (
-        cd linux-2.6.39.4
-        make mrproper
-        make headers_install ARCH="i386" INSTALL_HDR_PATH="$SYSROOT"
     )
 fi
 

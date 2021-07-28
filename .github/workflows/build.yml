@@ -20,8 +20,8 @@ jobs:
     - run: ./build.sh host_gmp
     - run: ./build.sh host_mpfr
     - run: ./build.sh host_mpc
-    - run: ./build.sh host_gcc
     - run: ./build.sh linux-headers
+    - run: ./build.sh host_gcc
     - run: ./build.sh glibc_bootstrap
     - run: ./build.sh libgcc
     - run: ./build.sh glibc_final
