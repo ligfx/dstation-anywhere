@@ -149,7 +149,7 @@ if should_build "host_gcc"; then
     (
         cd gcc-4.9.2
         ./configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" \
-            --enable-languages=c --disable-multilib \
+            --enable-languages=c --disable-multilib --disable-nls \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
             CFLAGS="-w" \
             # --enable-clocale=gnu --enable-threads=posix \
