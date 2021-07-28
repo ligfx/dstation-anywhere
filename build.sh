@@ -255,7 +255,7 @@ if should_build "lc2e"; then
         (
         mkdir -p tmp
         cd tmp
-        wget "http://www.creaturesdockingstation.com/dockingstation_195_64.tar.bz2"
+        wget --no-verbose "http://www.creaturesdockingstation.com/dockingstation_195_64.tar.bz2"
         tar xf dockingstation_195_64.tar.bz2
         rm dockingstation_195_64.tar.bz2
         (
@@ -282,6 +282,7 @@ if should_build "lc2e"; then
     # get the libraries
     log "Bundling lib32..."
     rm -fr "dockingstation_195_64/lib32" 
+    LD_LIBRARY_PATH="$LIBDIR:$topdir/dockingstation_195_64" ldd "$topdir/dockingstation_195_64/lc2e"
     libs=$(LD_LIBRARY_PATH="$LIBDIR:$topdir/dockingstation_195_64" ldd "$topdir/dockingstation_195_64/lc2e" | grep "=>" | sed 's/^.*=>//g' | sed 's/(0x[a-f0-9]\+)$//g')
     mkdir -p "dockingstation_195_64/lib32"
     cp "$LIBDIR/ld-linux.so.2" "dockingstation_195_64/lib32"
