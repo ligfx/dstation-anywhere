@@ -185,6 +185,7 @@ if should_build "glibc_bootstrap"; then
         make install-bootstrap-headers=yes install-headers
         # startup files
         make csu/subdir_lib
+        mkdir -p "$LIBDIR"
         install csu/crt1.o csu/crti.o csu/crtn.o "$LIBDIR"
         # dummy files
         if ! test -e "$LIBDIR/libc.so"; then
