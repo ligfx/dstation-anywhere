@@ -148,7 +148,7 @@ download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.bz2"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpfr/mpfr-3.0.1.tar.bz2" --with-gmp="$HOST_PREFIX"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz" --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX"
 if should_build "host_gcc"; then
-    download_and_patch "https://ftp.gnu.org/gnu/gcc/gcc-4.5.2.tar.bz2"
+    download_and_patch "https://ftp.gnu.org/gnu/gcc/gcc-4.5.2/gcc-4.5.2.tar.bz2"
     (
         cd gcc-4.5.2
         ./configure --target="i386-linux-gnu" --prefix="$HOST_PREFIX" \
