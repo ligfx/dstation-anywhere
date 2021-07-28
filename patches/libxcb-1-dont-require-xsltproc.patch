@@ -1,5 +1,5 @@
---- a/configure
-+++ b/configure
+--- a/libxcb-1.9.1/configure
++++ b/libxcb-1.9.1/configure
 @@ -13021,10 +13021,6 @@ $as_echo "no" >&6; }
  fi
  
