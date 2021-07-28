@@ -49,7 +49,9 @@ jobs:
     - run: ./build.sh pulseaudio
     - run: ./build.sh sdl
     - run: ./build.sh lc2e
+    - id: vars
+      run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
     - uses: actions/upload-artifact@v1
       with:
-        name: dstation-anywhere-${{ github.sha }}
+        name: dstation-anywhere-${{ steps.vars.outputs.sha_short }}
         path: dockingstation_195_64
