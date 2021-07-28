@@ -140,11 +140,11 @@ function should_build() {
 }
 
 # # toolchain for i386
-# download_patch_build_host "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2" \
-#    --target="i386-linux-gnu" --disable-nls --disable-werror
-# download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.bz2"
-# download_patch_build_host "https://ftp.gnu.org/gnu/mpfr/mpfr-3.0.1.tar.bz2" --with-gmp="$HOST_PREFIX"
-# download_patch_build_host "https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.bz2" --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX"
+download_patch_build_host "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2" \
+   --target="i386-linux-gnu" --disable-nls --disable-werror
+download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.bz2"
+download_patch_build_host "https://ftp.gnu.org/gnu/mpfr/mpfr-3.0.1.tar.bz2" --with-gmp="$HOST_PREFIX"
+download_patch_build_host "https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.bz2" --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX"
 # 
 # # gcc for i386
 # if should_build "host_gcc"; then
@@ -286,11 +286,6 @@ if should_build "lc2e"; then
     libs=$(LD_LIBRARY_PATH="$LIBDIR:$topdir/dockingstation_195_64" ldd "$topdir/dockingstation_195_64/lc2e" | grep "=>" | sed 's/^.*=>//g' | sed 's/(0x[a-f0-9]\+)$//g')
     mkdir -p "dockingstation_195_64/lib32"
     cp "$LIBDIR/ld-linux.so.2" "dockingstation_195_64/lib32"
-    # cp "$LIBDIR"/libc.so.* "dockingstation_195_64/lib32"
-    # cp "$LIBDIR"/libdl.so.* "dockingstation_195_64/lib32"
-    # cp "$LIBDIR"/libm.so.* "dockingstation_195_64/lib32"
-    # cp "$LIBDIR"/libpthread.so.* "dockingstation_195_64/lib32"
-    # cp "$LIBDIR"/librt.so.* "dockingstation_195_64/lib32"
     for f in $libs; do
         if [[ "$f" == "$LIBDIR"/* ]]; then
             cp "$f" "dockingstation_195_64/lib32"
