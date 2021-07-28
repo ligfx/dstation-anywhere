@@ -61,6 +61,4 @@ jobs:
       if: always()
       with:
         name: toolchain
-        path: |
-          sysroot
-          host_sysroot
+        path: toolchain
