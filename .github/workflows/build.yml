@@ -57,8 +57,10 @@ jobs:
       with:
         name: dstation-anywhere-${{ steps.vars.outputs.sha_short }}
         path: dockingstation_195_64
+    - if: always()
+      run: tar cf toolchain.tar.bz2 toolchain
     - uses: actions/upload-artifact@v2
       if: always()
       with:
         name: toolchain
-        path: toolchain
+        path: toolchain.tar.bz2
