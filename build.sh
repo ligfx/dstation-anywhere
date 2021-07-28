@@ -113,7 +113,7 @@ function download_patch_build() {
         cd "$dirname"
         mkdir -p build
         cd build
-        export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -isystem $cc_install_dir/include-fixed -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc --sysroot $SYSROOT -march=i686 -mtune=generic -fno-stack-protector -w"
+        export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -isystem $cc_install_dir/include-fixed -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc -march=i686 -mtune=generic -fno-stack-protector -w"
         export PKG_CONFIG_LIBDIR="$LIBDIR/pkgconfig:$PREFIX/share/pkgconfig"
         ../configure --prefix="$PREFIX" --host="i686-linux-gnu" $@ || ( print_config_log; false )
         make
@@ -138,7 +138,8 @@ function should_build() {
 
 # binutils for i686
 download_patch_build_host "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2" \
-   --target="i686-linux-gnu" --disable-nls --disable-werror --disable-multilib
+   --target="i686-linux-gnu" --disable-nls --disable-werror --disable-multilib \
+   --with-sysroot="$SYSROOT"
 
 # gcc for i686
 download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-6.0.0a.tar.bz2"
@@ -151,7 +152,7 @@ if should_build "host_gcc"; then
         ./configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" \
             --enable-languages=c --disable-multilib --disable-nls \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
-            CFLAGS="-w" \
+            --with-sysroot="$SYSROOT" \
             # --enable-clocale=gnu --enable-threads=posix \
             # --disable-bootstrap \
         make all-gcc
