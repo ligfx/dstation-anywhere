@@ -10,7 +10,6 @@ export MAKEFLAGS=$(( $(nproc || echo 2) + 1 ))
 
 HOST_PREFIX="$topdir/toolchain/usr"
 export PATH="$HOST_PREFIX/bin:$PATH"
-export LD_LIBRARY_PATH="$HOST_PREFIX/lib" # fixes error with gcc missing mpfr
 
 SYSROOT="$HOST_PREFIX/i686-linux-gnu"
 PREFIX="$SYSROOT/usr"
