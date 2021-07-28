@@ -19,12 +19,11 @@ jobs:
     - name: "Install dependencies"
       run: sudo apt-get update && sudo apt-get install gcc-i686-linux-gnu
     - run: ./build.sh host_binutils
-    - run: find host_sysroot
-    - run: host_sysroot/usr/bin/i386-linux-gnu-ld --verbose
-    - run: false
     - run: ./build.sh host_gmp
     - run: ./build.sh host_mpfr
     - run: ./build.sh host_mpc
+    - run: ./build.sh host_gcc
+    - run: false
     - run: ./build.sh host_zlib
     - run: ./build.sh host_libxml2
     - run: ./build.sh host_libxslt

@@ -43,7 +43,7 @@ function download_and_patch() {
         return 1
     fi
     filename=$(basename "$url")
-    dirname=$(echo "$filename" | sed 's/\.tar\.[a-z0-9]\+$//' )
+    dirname=$(echo "${filename%.tar.*}" )
     patchname=$(echo "$dirname" | sed 's/-[0-9]\+\(\.[0-9]\+\)\+$//' | tr "[:upper:]" "[:lower:]")
     
     if ! test -e "${dirname}"; then
@@ -142,25 +142,24 @@ function should_build() {
 # binutils for i386
 download_patch_build_host "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2" \
    --target="i386-linux-gnu" --disable-nls --disable-werror --disable-multilib
+
+# gcc for i386
 download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.bz2"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpfr/mpfr-3.0.1.tar.bz2" --with-gmp="$HOST_PREFIX"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz" --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX"
-# 
-# # gcc for i386
-# if should_build "host_gcc"; then
-#     download_and_patch "https://ftp.gnu.org/gnu/gcc/gcc-4.5.2.tar.bz2"
-#     (
-#         cd gcc-4.5.2
-#         ./configure --target="i386-linux-gnu" --prefix="$HOST_PREFIX" \
-#             --disable-nls --disable-libmudflap --disable-libssp --disable-libgomp \
-#             --enable-languages=c --disable-multilib --without-ppl --without-cloog \
-#             --enable-clocale=gnu --enable-threads=posix \
-#             --disable-bootstrap --with-gmp="$HOST_PREFIX" \
-#             --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX"
-#         make
-#         make install
-#     )
-# fi
+if should_build "host_gcc"; then
+    download_and_patch "https://ftp.gnu.org/gnu/gcc/gcc-4.5.2.tar.bz2"
+    (
+        cd gcc-4.5.2
+        ./configure --target="i386-linux-gnu" --prefix="$HOST_PREFIX" \
+            --enable-languages=c --disable-multilib \
+            # --enable-clocale=gnu --enable-threads=posix \
+            # --disable-bootstrap \
+            --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX"
+        make all-gcc
+        make install-gcc
+    )
+fi
 
 # xsltproc (for libxcb)
 download_patch_build_host "https://zlib.net/zlib-1.2.11.tar.gz"
