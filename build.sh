@@ -8,13 +8,9 @@ echo "topdir: $topdir"
 
 export MAKEFLAGS=$(( $(nproc || echo 2) + 1 ))
 
-HOST_SYSROOT="$topdir/toolchain"
-HOST_PREFIX="$HOST_SYSROOT/usr"
-HOST_BIN="$HOST_PREFIX/bin"
-HOST_INCLUDEDIR="$HOST_PREFIX/include"
-HOST_LIBDIR="$HOST_PREFIX/lib"
-export PATH="$HOST_BIN:$PATH"
-export LD_LIBRARY_PATH="$HOST_LIBDIR" # fixes error with gcc missing mpfr
+HOST_PREFIX="$topdir/toolchain/usr"
+export PATH="$HOST_PREFIX/bin:$PATH"
+export LD_LIBRARY_PATH="$HOST_PREFIX/lib" # fixes error with gcc missing mpfr
 
 SYSROOT="$HOST_PREFIX/i686-linux-gnu/sysroot"
 PREFIX="$SYSROOT/usr"
@@ -147,7 +143,7 @@ if should_build "linux-headers"; then
    (
        cd linux-2.6.39.4
        make mrproper
-       make headers_install ARCH="i386" INSTALL_HDR_PATH="$SYSROOT"
+       make headers_install ARCH="i386" INSTALL_HDR_PATH="$PREFIX"
    )
 fi
 
@@ -162,7 +158,7 @@ if should_build "host_gcc"; then
         ./configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" \
             --enable-languages=c --disable-multilib --disable-nls \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
-            --with-sysroot="$SYSROOT" --with-native-system-header-dir="/include" \
+            --with-sysroot="$SYSROOT" \
             # --enable-clocale=gnu --enable-threads=posix \
             # --disable-bootstrap \
         make all-gcc
@@ -182,19 +178,19 @@ if should_build "glibc_bootstrap"; then
         export CC="${CC} -g -march=i686 -mtune=generic -U_FORTIFY_SOURCE -w"
         # add libc_cv_forced_unwind=yes, libc_cv_c_cleanup=yes, and libc_cv_ctors_header=yes
         # because the test executables will fail to link, since we don't have libc yet! stupid
-        ../configure --prefix="$SYSROOT" --host="i686-linux-gnu" --disable-multilib \
+        ../configure --prefix="$PREFIX" --host="i686-linux-gnu" --disable-multilib \
             libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes libc_cv_ctors_header=yes \
             || ( print_config_log; false )
         # headers
         make install-bootstrap-headers=yes install-headers
         # startup files
         make csu/subdir_lib
-        install csu/crt1.o csu/crti.o csu/crtn.o "$SYSROOT/lib"
+        install csu/crt1.o csu/crti.o csu/crtn.o "$LIBDIR"
         # dummy files
-        if ! test -e "$SYSROOT/lib/libc.so"; then
-            i686-linux-gnu-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o "$SYSROOT/lib/libc.so"
+        if ! test -e "$LIBDIR/libc.so"; then
+            i686-linux-gnu-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o "$LIBDIR/libc.so"
         fi
-        touch "$SYSROOT/include/gnu/stubs.h"
+        touch "$INCLUDEDIR/gnu/stubs.h"
     )
 fi
 
