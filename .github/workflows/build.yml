@@ -49,3 +49,7 @@ jobs:
     - run: ./build.sh pulseaudio
     - run: ./build.sh sdl
     - run: ./build.sh lc2e
+    - uses: actions/upload-artifact@v1
+      with:
+        name: dstation-anywhere-${{ github.sha }}.zip
+        path: dockingstation_195_64
