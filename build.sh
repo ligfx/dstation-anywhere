@@ -16,7 +16,7 @@ PREFIX="$SYSROOT/usr"
 INCLUDEDIR="$PREFIX/include"
 LIBDIR="$PREFIX/lib"
 
-CC="LD_LIBRARY_PATH=\"$HOST_PREFIX/lib\" i686-linux-gnu-gcc"
+CC="i686-linux-gnu-gcc"
 
 export CFLAGS=
 export CXXFLAGS=
@@ -84,6 +84,7 @@ function download_patch_build_host() {
         make
         make install
     )
+    fix_runpaths
 }
 
 function download_patch_build() {
@@ -111,6 +112,30 @@ function download_patch_build() {
     )
 }
 
+function relative_path() {
+    s=$(cd ${1%%/};pwd)
+    d=$(cd $2;pwd)
+    b=
+    while [ "${d#$s/}" == "${d}" ]; do
+        s=$(dirname $s)
+        b="../${b}"
+    done
+    echo ${b}${d#$s/}
+}
+
+function fix_runpaths() {
+    (
+        elf_files=$(find "$HOST_PREFIX"/{bin,libexec} -type f -exec sh -c "file {} | grep -i ': elf ' > /dev/null" \; -print)
+        echo "$elf_files"
+        IFS=$'\n'
+        for f in $elf_files; do
+            rpath=$(relative_path "$(dirname "$f")" "$HOST_PREFIX/lib")
+            echo patchelf --set-rpath "$rpath" "$f"
+            patchelf --set-rpath "$rpath" "$f"
+        done
+    )
+}
+
 ##
 ## Actually build stuff
 ##
@@ -125,6 +150,9 @@ echo "module_to_build: $module_to_build"
 function should_build() {
     test -z "$module_to_build" -o "$1" = "$module_to_build"
 }
+
+# patchelf
+download_patch_build_host "https://github.com/NixOS/patchelf/releases/download/0.12/patchelf-0.12.tar.bz2"
 
 # binutils for i686
 download_patch_build_host "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2" \
@@ -161,6 +189,7 @@ if should_build "host_gcc"; then
         make all-gcc
         make install-gcc
     )
+    fix_runpaths
 fi
 
 # glibc_bootstrap
@@ -241,9 +270,6 @@ download_patch_build "https://libsdl.org/release/SDL-1.2.15.tar.gz" \
 
 # rebuild SDL_mixer for consistency
 download_patch_build "https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12.tar.gz"
-
-# patchelf
-download_patch_build_host "https://github.com/NixOS/patchelf/releases/download/0.12/patchelf-0.12.tar.bz2"
 
 # download and unpack dockingstation_195_64
 if should_build "lc2e"; then

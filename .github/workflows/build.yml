@@ -16,6 +16,7 @@ jobs:
     steps:
     - name: "Check out source"
       uses: actions/checkout@v2
+    - run: ./build.sh host_patchelf
     - run: ./build.sh host_binutils
     - run: ./build.sh host_gmp
     - run: ./build.sh host_mpfr
@@ -51,7 +52,6 @@ jobs:
     - run: ./build.sh libsndfile
     - run: ./build.sh pulseaudio
     - run: ./build.sh sdl
-    - run: ./build.sh host_patchelf
     - run: ./build.sh lc2e
     - id: vars
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
