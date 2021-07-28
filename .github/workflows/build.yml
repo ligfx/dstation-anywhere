@@ -29,9 +29,9 @@ jobs:
     - run: ./build.sh inputproto
     - run: ./build.sh kbproto
     - run: ./build.sh xextproto
+    - run: ./build.sh util-macros
     - run: ./build.sh xproto
     - run: ./build.sh xcb-proto
-    - run: ./build.sh util-macros
     - run: ./build.sh xtrans
     - run: ./build.sh libice
     - run: ./build.sh libsm
