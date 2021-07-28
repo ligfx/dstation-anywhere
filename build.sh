@@ -153,9 +153,9 @@ if should_build "host_gcc"; then
         cd gcc-4.5.2
         ./configure --target="i386-linux-gnu" --prefix="$HOST_PREFIX" \
             --enable-languages=c --disable-multilib \
+            --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
             # --enable-clocale=gnu --enable-threads=posix \
             # --disable-bootstrap \
-            --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX"
         make all-gcc
         make install-gcc
     )
