@@ -316,6 +316,9 @@ if should_build "lc2e"; then
     )
 
     log "Fixing rpaths..."
+    patchelf --set-rpath '$ORIGIN/lib32:$ORIGIN' dockingstation_195_64/imageconvert
+    patchelf --set-rpath '$ORIGIN/lib32:$ORIGIN' dockingstation_195_64/langpick
+    patchelf --set-rpath '$ORIGIN/lib32:$ORIGIN' dockingstation_195_64/lc2e
     for f in dockingstation_195_64/lib32/*; do
         rpath=$(patchelf --print-rpath "$f")
         if [[ "$rpath" == /* ]]; then
