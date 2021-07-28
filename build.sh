@@ -211,7 +211,7 @@ download_patch_build "pkgconfig/kbproto.pc" "https://www.x.org/releases/individu
 download_patch_build "pkgconfig/xextproto.pc" "https://www.x.org/releases/individual/proto/xextproto-7.2.0.tar.bz2"
 download_patch_build "pkgconfig/xorg-macros.pc" "https://www.x.org/releases/individual/util/util-macros-1.16.2.tar.bz2"
 download_patch_build "pkgconfig/xproto.pc" "https://www.x.org/releases/individual/proto/xproto-7.0.22.tar.bz2"
-download_patch_build "pkgconfig/xcb-proto.pc" "https://www.x.org/releases/individual/xcb/xcb-proto-1.6.tar.bz2"
+download_patch_build "pkgconfig/xcb-proto.pc" "https://www.x.org/releases/individual/xcb/xcb-proto-1.7.tar.bz2"
 download_patch_build "pkgconfig/xtrans.pc" "https://www.x.org/releases/individual/lib/xtrans-1.2.6.tar.bz2"
 
 # X11
