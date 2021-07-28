@@ -1,6 +1,6 @@
 --- a/glib-1.2.10/glib.h
 +++ b/glib-1.2.10/glib.h
-@@ -167,57 +167,9 @@ extern "C" {
+@@ -167,57 +167,11 @@ extern "C" {
  #define G_STRUCT_MEMBER(member_type, struct_p, struct_offset)   \
      (*(member_type*) G_STRUCT_MEMBER_P ((struct_p), (struct_offset)))
  
@@ -55,9 +55,11 @@
 -#  endif /* !__GNUC__ */
 -#endif /* !G_INLINE_FUNC */
 -
-+#define G_CAN_INLINE 1
-+#define G_HAVE_INLINE 1
-+#define G_INLINE_FUNC inline
++#ifndef G_INLINE_FUNC
++#  define G_CAN_INLINE 1
++#  define G_HAVE_INLINE 1
++#  define G_INLINE_FUNC inline
++#endif
  
  /* Provide simple macro statement wrappers (adapted from Perl):
   *  G_STMT_START { statements; } G_STMT_END;
