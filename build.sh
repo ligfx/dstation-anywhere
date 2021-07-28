@@ -144,7 +144,7 @@ download_patch_build_host "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.
    --target="i386-linux-gnu" --disable-nls --disable-werror --disable-multilib
 
 # gcc for i386
-download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-6.0.0.tar.bz2"
+download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-6.0.0a.tar.bz2"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpfr/mpfr-3.1.2.tar.bz2" --with-gmp="$HOST_PREFIX"
 download_patch_build_host "https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.gz" --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX"
 if should_build "host_gcc"; then
