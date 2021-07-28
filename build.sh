@@ -178,7 +178,7 @@ if should_build "glibc_bootstrap"; then
         cd build
         # cannot have sysroot and stuff because configure needs to compile executables that link against glibc. ugh.
         export CC="${CC} -g -march=i686 -mtune=generic -fno-stack-protector -U_FORTIFY_SOURCE -w"
-        ../configure --prefix="$PREFIX" --host="i686-linux-gnu" || ( print_config_log; false )
+        ../configure --prefix="$PREFIX" --host="i686-linux-gnu" --disable-multilib libc_cv_forced_unwind=yes || ( print_config_log; false )
         # headers
         make install-bootstrap-headers=yes install-headers
         # startup files
