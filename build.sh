@@ -72,7 +72,7 @@ function download_patch_build_host() {
     shift 1
     
     filename=$(basename "$url")
-    dirname=$(echo "$filename" | sed 's/\.tar\.[a-z0-9]\+$//' )
+    dirname=$(echo "${filename%.tar.*}" )
     patchname=host_$(echo "$dirname" | sed 's/-[0-9]\+\(\.[0-9]\+\)\+$//' | tr "[:upper:]" "[:lower:]")
     
     if ! should_build "$patchname"; then
@@ -91,37 +91,33 @@ function download_patch_build_host() {
 }
 
 function download_patch_build() {
-    target=$1
-    url=$2
-    shift 2
+    url=$1
+    shift 1
     
     filename=$(basename "$url")
-    dirname=$(echo "$filename" | sed 's/\.tar\.[a-z0-9]\+$//' )
+    dirname=$(echo "${filename%.tar.*}" )
     patchname=$(echo "$dirname" | sed 's/-[0-9]\+\(\.[0-9]\+\)\+$//' | tr "[:upper:]" "[:lower:]")
     
     if ! should_build "$patchname"; then
         return
     fi
     
-    log "Checking $target..."
-    if ! test -e "$LIBDIR/$target"; then
-        download_and_patch "$url"
-        cc_install_dir=$("${CC}" -print-search-dirs | grep '^install: ' | sed 's/^install: //')
-        if [ -z "$cc_install_dir" ]; then
-            echo "ERROR: couldn't discover compiler install directory" >&2
-            exit 1
-        fi
-        (
-            cd "$dirname"
-            mkdir -p build
-            cd build
-            export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -isystem $cc_install_dir/include-fixed -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc --sysroot $SYSROOT -march=i686 -mtune=generic -fno-stack-protector"
-            export PKG_CONFIG_LIBDIR="$LIBDIR/pkgconfig:$PREFIX/share/pkgconfig"
-            ../configure --prefix="$PREFIX" --host="i686-linux-gnu" $@ || ( print_config_log; false )
-            make
-            make install
-        )
+    download_and_patch "$url"
+    cc_install_dir=$("${CC}" -print-search-dirs | grep '^install: ' | sed 's/^install: //')
+    if [ -z "$cc_install_dir" ]; then
+        echo "ERROR: couldn't discover compiler install directory" >&2
+        exit 1
     fi
+    (
+        cd "$dirname"
+        mkdir -p build
+        cd build
+        export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -isystem $cc_install_dir/include-fixed -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc --sysroot $SYSROOT -march=i686 -mtune=generic -fno-stack-protector"
+        export PKG_CONFIG_LIBDIR="$LIBDIR/pkgconfig:$PREFIX/share/pkgconfig"
+        ../configure --prefix="$PREFIX" --host="i686-linux-gnu" $@ || ( print_config_log; false )
+        make
+        make install
+    )
 }
 
 ##
@@ -203,47 +199,43 @@ if should_build "libgcc"; then ( cd gcc-4.9.2 && make all-target-libgcc && make 
 if should_build "glibc_final"; then ( cd glibc-2.13/build && make && make install ); fi
 
 # zlib
-download_patch_build "libz.so" "https://zlib.net/zlib-1.2.11.tar.gz"
+download_patch_build "https://zlib.net/zlib-1.2.11.tar.gz"
 
 # X11
-download_patch_build "pkgconfig/pthread-stubs.pc" "https://xcb.freedesktop.org/dist/libpthread-stubs-0.3.tar.bz2"
-download_patch_build "pkgconfig/inputproto.pc" "https://www.x.org/releases/individual/proto/inputproto-2.1.99.6.tar.bz2"
-download_patch_build "pkgconfig/kbproto.pc" "https://www.x.org/releases/individual/proto/kbproto-1.0.5.tar.bz2"
-download_patch_build "pkgconfig/xextproto.pc" "https://www.x.org/releases/individual/proto/xextproto-7.2.0.tar.bz2"
-download_patch_build "pkgconfig/xorg-macros.pc" "https://www.x.org/releases/individual/util/util-macros-1.16.2.tar.bz2"
-download_patch_build "pkgconfig/xproto.pc" "https://www.x.org/releases/individual/proto/xproto-7.0.22.tar.bz2"
-download_patch_build "pkgconfig/xcb-proto.pc" "https://www.x.org/releases/individual/xcb/xcb-proto-1.7.tar.bz2"
-download_patch_build "pkgconfig/xtrans.pc" "https://www.x.org/releases/individual/lib/xtrans-1.2.6.tar.bz2"
-download_patch_build "libICE.so" "https://www.x.org/releases/individual/lib/libICE-1.0.7.tar.bz2"
-download_patch_build "libSM.so" "https://www.x.org/releases/individual/lib/libSM-1.2.0.tar.bz2"
-download_patch_build "libXau.so" "https://www.x.org/releases/individual/lib/libXau-1.0.6.tar.bz2"
-download_patch_build "libxcb.so" \
-    "https://www.x.org/releases/individual/xcb/libxcb-1.9.1.tar.bz2" \
+download_patch_build "https://xcb.freedesktop.org/dist/libpthread-stubs-0.3.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/proto/inputproto-2.1.99.6.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/proto/kbproto-1.0.5.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/proto/xextproto-7.2.0.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/util/util-macros-1.16.2.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/proto/xproto-7.0.22.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/xcb/xcb-proto-1.7.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/lib/xtrans-1.2.6.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/lib/libICE-1.0.7.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/lib/libSM-1.2.0.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/lib/libXau-1.0.6.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/xcb/libxcb-1.9.1.tar.bz2" \
     --enable-xinput
-download_patch_build "libX11.so" "https://www.x.org/releases/individual/lib/libX11-1.4.99.1.tar.bz2"
-download_patch_build "libXt.so" "https://www.x.org/releases/individual/lib/libXt-1.1.1.tar.bz2"
-download_patch_build "libXext.so" "https://www.x.org/releases/individual/lib/libXext-1.3.0.tar.bz2"
-download_patch_build "libXi.so" "https://www.x.org/releases/individual/lib/libXi-1.5.99.3.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/lib/libX11-1.4.99.1.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/lib/libXt-1.1.1.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/lib/libXext-1.3.0.tar.bz2"
+download_patch_build "https://www.x.org/releases/individual/lib/libXi-1.5.99.3.tar.bz2"
 
 # glib and gtk+
-download_patch_build "libglib-1.2.so.0" "https://download.gnome.org/sources/glib/1.2/glib-1.2.10.tar.gz"
-download_patch_build "libgtk-1.2.so.0" \
-    "https://download.gnome.org/sources/gtk+/1.2/gtk+-1.2.10.tar.gz" \
+download_patch_build "https://download.gnome.org/sources/glib/1.2/glib-1.2.10.tar.gz"
+download_patch_build "https://download.gnome.org/sources/gtk+/1.2/gtk+-1.2.10.tar.gz" \
     --disable-glibtest --with-glib-prefix="$PREFIX" --with-x
 
 # alsa
-download_patch_build "libasound.so" "ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.2.4.tar.bz2"
+download_patch_build "ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.2.4.tar.bz2"
 
 # pulseaudio
-download_patch_build "libltdl.so" "https://ftpmirror.gnu.org/libtool/libtool-2.4.2.tar.gz" # provides libtdl
-download_patch_build "libsndfile.so" "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.20.tar.gz"
-download_patch_build "libpulse.so" \
-    "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-14.2.tar.gz" \
+download_patch_build "https://ftpmirror.gnu.org/libtool/libtool-2.4.2.tar.gz" # provides libtdl
+download_patch_build "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.20.tar.gz"
+download_patch_build "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-14.2.tar.gz" \
     --enable-memfd=no --without-caps --disable-glib2
     
 # SDL with pulseaudio support
-download_patch_build "libSDL.so" \
-    "https://libsdl.org/release/SDL-1.2.15.tar.gz" \
+download_patch_build "https://libsdl.org/release/SDL-1.2.15.tar.gz" \
      --with-x --enable-alsa=yes --enable-alsa-shared=no --enable-pulseaudio=yes \
      --enable-pulseaudio-shared=no
 
