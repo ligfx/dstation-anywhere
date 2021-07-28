@@ -26,9 +26,6 @@ jobs:
     - run: ./build.sh libgcc
     - run: ./build.sh glibc_final
     - run: ./build.sh zlib
-    - run: ./build.sh host_zlib
-    - run: ./build.sh host_libxml2
-    - run: ./build.sh host_libxslt
     - run: ./build.sh libpthread-stubs
     - run: ./build.sh inputproto
     - run: ./build.sh kbproto

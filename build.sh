@@ -220,11 +220,6 @@ fi
 # zlib
 download_patch_build "libz.so" "https://zlib.net/zlib-1.2.11.tar.gz"
 
-# xsltproc (for libxcb)
-download_patch_build_host "https://zlib.net/zlib-1.2.11.tar.gz"
-download_patch_build_host "http://xmlsoft.org/sources/libxml2-2.9.12.tar.gz" --without-python
-download_patch_build_host "http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz" --without-python
-
 # prep for X libraries
 download_patch_build "pkgconfig/pthread-stubs.pc" "https://xcb.freedesktop.org/dist/libpthread-stubs-0.3.tar.bz2"
 download_patch_build "pkgconfig/inputproto.pc" "https://www.x.org/releases/individual/proto/inputproto-2.1.99.6.tar.bz2"

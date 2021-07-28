@@ -1,0 +1,27 @@
+--- a/configure
++++ b/configure
+@@ -13021,10 +13021,6 @@ $as_echo "no" >&6; }
+ fi
+ 
+ 
+-if test "$XSLTPROC" = "no"; then
+-   as_fn_error $? "XCB requires xsltproc." "$LINENO" 5
+-fi
+-
+ HTML_CHECK_RESULT=false
+ if test x"$HAVE_CHECK" = xyes; then
+ 	if test x"$XSLTPROC" != xno; then
+diff --git a/configure.ac b/configure.ac
+index 9796f90..366e4ec 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -28,9 +28,6 @@ AC_PROG_LIBTOOL
+ AC_PROG_CC
+ 
+ AC_PATH_PROG(XSLTPROC, xsltproc, no)
+-if test "$XSLTPROC" = "no"; then
+-   AC_MSG_ERROR([XCB requires xsltproc.])
+-fi
+ 
+ HTML_CHECK_RESULT=false
+ if test x"$HAVE_CHECK" = xyes; then
