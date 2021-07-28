@@ -24,15 +24,14 @@ jobs:
     - run: ./build.sh host_mpc
     - run: ./build.sh host_gcc
     - run: false
-    - run: ./build.sh host_zlib
-    - run: ./build.sh host_libxml2
-    - run: ./build.sh host_libxslt
-    - run: ./build.sh host_patchelf
     - run: ./build.sh linux-headers
     - run: ./build.sh glibc_bootstrap
     - run: ./build.sh libgcc
     - run: ./build.sh glibc_final
     - run: ./build.sh zlib
+    - run: ./build.sh host_zlib
+    - run: ./build.sh host_libxml2
+    - run: ./build.sh host_libxslt
     - run: ./build.sh libpthread-stubs
     - run: ./build.sh inputproto
     - run: ./build.sh kbproto
@@ -56,6 +55,7 @@ jobs:
     - run: ./build.sh libsndfile
     - run: ./build.sh pulseaudio
     - run: ./build.sh sdl
+    - run: ./build.sh host_patchelf
     - run: ./build.sh lc2e
     - id: vars
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
