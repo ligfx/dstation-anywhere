@@ -184,6 +184,7 @@ if should_build "glibc_bootstrap"; then
             || ( print_config_log; false )
         # headers
         make install-bootstrap-headers=yes install-headers
+        install bits/stdio_lim.h "$INCLUDEDIR/bits"
         # startup files
         make csu/subdir_lib
         mkdir -p "$LIBDIR"
