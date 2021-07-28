@@ -113,7 +113,7 @@ function download_patch_build() {
         cd "$dirname"
         mkdir -p build
         cd build
-        export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -isystem $cc_install_dir/include-fixed -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc -march=i686 -mtune=generic -fno-stack-protector -w"
+        export CC="${CC} -nostdinc -isystem $INCLUDEDIR -isystem $cc_install_dir/include -isystem $cc_install_dir/include-fixed -nodefaultlibs -L$LIBDIR -L$cc_install_dir -lc -ldl -lgcc -march=i686 -mtune=generic -w"
         export PKG_CONFIG_LIBDIR="$LIBDIR/pkgconfig:$PREFIX/share/pkgconfig"
         ../configure --prefix="$PREFIX" --host="i686-linux-gnu" $@ || ( print_config_log; false )
         make
@@ -179,7 +179,7 @@ if should_build "glibc_bootstrap"; then
         cd build
         # cannot have sysroot and stuff because configure needs to compile executables that
         # link against glibc. ugh.
-        export CC="${CC} -g -march=i686 -mtune=generic -fno-stack-protector -U_FORTIFY_SOURCE -w"
+        export CC="${CC} -g -march=i686 -mtune=generic -U_FORTIFY_SOURCE -w"
         # add libc_cv_forced_unwind=yes, libc_cv_c_cleanup=yes, and libc_cv_ctors_header=yes
         # because the test executables will fail to link, since we don't have libc yet! stupid
         ../configure --prefix="$PREFIX" --host="i686-linux-gnu" --disable-multilib \
