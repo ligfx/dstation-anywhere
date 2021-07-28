@@ -18,4 +18,30 @@ jobs:
       uses: actions/checkout@v2
     - name: "Install dependencies"
       run: sudo apt-get update && sudo apt-get install gcc-i686-linux-gnu
-    - run: ./buildall.sh
+    - run: ./build.sh linux-headers
+    - run: ./build.sh glibc
+    - run: ./build.sh zlib
+    - run: ./build.sh libpthread-stubs
+    - run: ./build.sh inputproto
+    - run: ./build.sh kbproto
+    - run: ./build.sh xextproto
+    - run: ./build.sh xproto
+    - run: ./build.sh xcb-proto
+    - run: ./build.sh util-macros
+    - run: ./build.sh xtrans
+    - run: ./build.sh libice
+    - run: ./build.sh libsm
+    - run: ./build.sh libxau
+    - run: ./build.sh libxcb
+    - run: ./build.sh libx11
+    - run: ./build.sh libxt
+    - run: ./build.sh libxext
+    - run: ./build.sh libxi
+    - run: ./build.sh glib
+    - run: ./build.sh gtk+
+    - run: ./build.sh libtool
+    - run: ./build.sh alsa-lib
+    - run: ./build.sh libsndfile
+    - run: ./build.sh pulseaudio
+    - run: ./build.sh sdl
+    - run: ./build.sh lc2e
