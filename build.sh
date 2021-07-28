@@ -80,7 +80,8 @@ function download_patch_build_host() {
         cd "$dirname"
         mkdir -p build_host
         cd build_host
-        ../configure --prefix="$HOST_PREFIX" CFLAGS="-w" $@ || ( print_config_log; false )
+        ../configure --prefix="$HOST_PREFIX" CFLAGS="-w" LDFLAGS="-Wl,-R,\"$HOST_PREFIX/lib\" -Wl,--enable-new-dtags"
+ $@ || ( print_config_log; false )
         make
         make install
     )
@@ -161,6 +162,7 @@ if should_build "host_gcc"; then
             --enable-languages=c --disable-multilib --disable-nls \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
             --with-sysroot="$SYSROOT" --with-native-system-header-dir="/include" \
+            LDFLAGS="-Wl,-R,\"$HOST_PREFIX/lib\" -Wl,--enable-new-dtags" \
             # --enable-clocale=gnu --enable-threads=posix \
             # --disable-bootstrap \
         make all-gcc
