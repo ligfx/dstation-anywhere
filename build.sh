@@ -156,7 +156,9 @@ if should_build "host_gcc"; then
     download_and_patch "https://ftp.gnu.org/gnu/gcc/gcc-4.9.2/gcc-4.9.2.tar.bz2"
     (
         cd gcc-4.9.2
-        ./configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" \
+        mkdir -p build
+        cd build
+        ../configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" \
             --enable-languages=c --disable-multilib --disable-nls \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
             --with-sysroot="$SYSROOT" \
@@ -199,7 +201,7 @@ fi
 # libgcc
 # static libraries libgcc.a and libgcc_eh.a go to $HOST_PREFIX/lib/gcc/i686-linux-gnu/4.9.2 ?
 # shared library libgcc_s.so goes to $HOST_PREFIX/i686-linux-gnu/lib ?
-if should_build "libgcc"; then ( cd gcc-4.9.2 && make all-target-libgcc && make install-target-libgcc ); fi
+if should_build "libgcc"; then ( cd gcc-4.9.2/build && make all-target-libgcc && make install-target-libgcc ); fi
 
 # glibc_final
 if should_build "glibc_final"; then ( cd glibc-2.13/build && make && make install ); fi
