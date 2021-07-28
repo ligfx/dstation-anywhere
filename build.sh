@@ -21,11 +21,6 @@ INCLUDEDIR="$PREFIX/include"
 LIBDIR="$PREFIX/lib"
 
 CC="i686-linux-gnu-gcc"
-cc_install_dir=$("${CC}" -print-search-dirs | grep '^install: ' | sed 's/^install: //')
-if [ -z "$cc_install_dir" ]; then
-    echo "ERROR: couldn't discover compiler install directory" >&2
-    exit 1
-fi
 
 export CFLAGS=
 export CXXFLAGS=
@@ -111,6 +106,11 @@ function download_patch_build() {
     log "Checking $target..."
     if ! test -e "$LIBDIR/$target"; then
         download_and_patch "$url"
+        cc_install_dir=$("${CC}" -print-search-dirs | grep '^install: ' | sed 's/^install: //')
+        if [ -z "$cc_install_dir" ]; then
+            echo "ERROR: couldn't discover compiler install directory" >&2
+            exit 1
+        fi
         (
             cd "$dirname"
             mkdir -p build

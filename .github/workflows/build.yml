@@ -16,14 +16,11 @@ jobs:
     steps:
     - name: "Check out source"
       uses: actions/checkout@v2
-    - name: "Install dependencies"
-      run: sudo apt-get update && sudo apt-get install gcc-i686-linux-gnu
     - run: ./build.sh host_binutils
     - run: ./build.sh host_gmp
     - run: ./build.sh host_mpfr
     - run: ./build.sh host_mpc
     - run: ./build.sh host_gcc
-    - run: false
     - run: ./build.sh linux-headers
     - run: ./build.sh glibc_bootstrap
     - run: ./build.sh libgcc
