@@ -51,5 +51,5 @@ jobs:
     - run: ./build.sh lc2e
     - uses: actions/upload-artifact@v1
       with:
-        name: dstation-anywhere-${{ github.sha }}.zip
+        name: dstation-anywhere-${{ github.sha }}
         path: dockingstation_195_64
