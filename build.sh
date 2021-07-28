@@ -162,15 +162,12 @@ fi
 
 # kernel headers for glibc
 if should_build "linux-headers"; then
-    log "Checking linux/unistd.h..."
-    if ! test -e "$PREFIX/include/linux/unistd.h"; then
-        download_and_patch "https://mirrors.edge.kernel.org/pub/linux/kernel/v2.6/linux-2.6.39.4.tar.bz2"
-        (
-            cd linux-2.6.39.4
-            make mrproper
-            make headers_install ARCH="i686" INSTALL_HDR_PATH="$PREFIX"
-        )
-    fi
+    download_and_patch "https://mirrors.edge.kernel.org/pub/linux/kernel/v2.6/linux-2.6.39.4.tar.bz2"
+    (
+        cd linux-2.6.39.4
+        make mrproper
+        make headers_install ARCH="i686" INSTALL_HDR_PATH="$PREFIX"
+    )
 fi
 
 # glibc_bootstrap
@@ -197,29 +194,17 @@ if should_build "glibc_bootstrap"; then
 fi
 
 # libgcc
-if should_build "libgcc"; then
-    (
-        cd gcc-4.9.2
-        make all-target-libgcc
-        make install-target-libgcc
-        # static libraries libgcc.a and libgcc_eh.a go to $HOST_PREFIX/lib/gcc/i686-linux-gnu/4.5.2
-        # shared library libgcc_s.so goes to $HOST_PREFIX/i686-linux-gnu/lib
-    )
-fi
+# static libraries libgcc.a and libgcc_eh.a go to $HOST_PREFIX/lib/gcc/i686-linux-gnu/4.9.2 ?
+# shared library libgcc_s.so goes to $HOST_PREFIX/i686-linux-gnu/lib ?
+if should_build "libgcc"; then ( cd gcc-4.9.2 && make all-target-libgcc && make install-target-libgcc ); fi
 
 # glibc_final
-if should_build "glibc_final"; then
-    (
-        cd glibc-2.13/build
-        make
-        make install
-    )
-fi
+if should_build "glibc_final"; then ( cd glibc-2.13/build && make && make install ); fi
 
 # zlib
 download_patch_build "libz.so" "https://zlib.net/zlib-1.2.11.tar.gz"
 
-# prep for X libraries
+# X11
 download_patch_build "pkgconfig/pthread-stubs.pc" "https://xcb.freedesktop.org/dist/libpthread-stubs-0.3.tar.bz2"
 download_patch_build "pkgconfig/inputproto.pc" "https://www.x.org/releases/individual/proto/inputproto-2.1.99.6.tar.bz2"
 download_patch_build "pkgconfig/kbproto.pc" "https://www.x.org/releases/individual/proto/kbproto-1.0.5.tar.bz2"
@@ -228,8 +213,6 @@ download_patch_build "pkgconfig/xorg-macros.pc" "https://www.x.org/releases/indi
 download_patch_build "pkgconfig/xproto.pc" "https://www.x.org/releases/individual/proto/xproto-7.0.22.tar.bz2"
 download_patch_build "pkgconfig/xcb-proto.pc" "https://www.x.org/releases/individual/xcb/xcb-proto-1.7.tar.bz2"
 download_patch_build "pkgconfig/xtrans.pc" "https://www.x.org/releases/individual/lib/xtrans-1.2.6.tar.bz2"
-
-# X11
 download_patch_build "libICE.so" "https://www.x.org/releases/individual/lib/libICE-1.0.7.tar.bz2"
 download_patch_build "libSM.so" "https://www.x.org/releases/individual/lib/libSM-1.2.0.tar.bz2"
 download_patch_build "libXau.so" "https://www.x.org/releases/individual/lib/libXau-1.0.6.tar.bz2"
@@ -247,17 +230,17 @@ download_patch_build "libgtk-1.2.so.0" \
     "https://download.gnome.org/sources/gtk+/1.2/gtk+-1.2.10.tar.gz" \
     --disable-glibtest --with-glib-prefix="$PREFIX" --with-x
 
-# libtool provides ltdl which is required by pulseaudio
-download_patch_build "libltdl.so" "https://ftpmirror.gnu.org/libtool/libtool-2.4.2.tar.gz"
-
-# audio
+# alsa
 download_patch_build "libasound.so" "ftp://ftp.alsa-project.org/pub/lib/alsa-lib-1.2.4.tar.bz2"
+
+# pulseaudio
+download_patch_build "libltdl.so" "https://ftpmirror.gnu.org/libtool/libtool-2.4.2.tar.gz" # provides libtdl
 download_patch_build "libsndfile.so" "http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.20.tar.gz"
 download_patch_build "libpulse.so" \
     "https://freedesktop.org/software/pulseaudio/releases/pulseaudio-14.2.tar.gz" \
     --enable-memfd=no --without-caps --disable-glib2
     
-# rebuild SDL with pulseaudio support
+# SDL with pulseaudio support
 download_patch_build "libSDL.so" \
     "https://libsdl.org/release/SDL-1.2.15.tar.gz" \
      --with-x --enable-alsa=yes --enable-alsa-shared=no --enable-pulseaudio=yes \
@@ -287,7 +270,8 @@ if should_build "lc2e"; then
             find . -name '*.bz2' -exec bunzip2 {} \;
             rm Readme.txt dstation-install libSDL-1.2.so.0
             for d in Backgrounds Images "Overlay Data" Sounds; do
-            ( cd "$d" && for f in *; do test "$f" == "${f,,}" || mv "$f" "${f,,}"; done )
+                # lowercase the filenames
+                ( cd "$d" && for f in *; do test "$f" == "${f,,}" || mv "$f" "${f,,}"; done )
             done
         )
         mv dockingstation_195_64 "$topdir"
