@@ -63,8 +63,7 @@ function download_and_patch() {
 }
 
 function print_config_log() {
-    # cat config.log | grep -B 500 "configure:[0-9]\+: \?error:"
-    true
+    cat config.log | grep -B 500 "configure:[0-9]\+: \?error:"
 }
 
 function download_patch_build_host() {
