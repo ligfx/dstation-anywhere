@@ -18,10 +18,9 @@ jobs:
       uses: actions/checkout@v2
     - name: "Install dependencies"
       run: sudo apt-get update && sudo apt-get install gcc-i686-linux-gnu
-    - run: ./build.sh binutils
-    - run: ./build.sh gmp
-    - run: ./build.sh mpfr
-    - run: ./build.sh mpc
+    - run: ./build.sh host_zlib
+    - run: ./build.sh host_libxml2
+    - run: ./build.sh host_libxslt
     - run: ./build.sh linux-headers
     - run: ./build.sh glibc
     - run: ./build.sh zlib

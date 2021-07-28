@@ -69,6 +69,29 @@ function print_config_log() {
     true
 }
 
+function download_patch_build_host() {
+    url=$1
+    shift 1
+    
+    filename=$(basename "$url")
+    dirname=$(echo "$filename" | sed 's/\.tar\.[a-z0-9]\+$//' )
+    patchname=host_$(echo "$dirname" | sed 's/-[0-9]\+\(\.[0-9]\+\)\+$//' | tr "[:upper:]" "[:lower:]")
+    
+    if ! should_build "$patchname"; then
+        return
+    fi
+    
+    download_and_patch "$url"
+    (
+        cd "$dirname"
+        mkdir -p build_host
+        cd build_host
+        ../configure --prefix="$HOST_PREFIX" $@ || ( print_config_log; false )
+        make
+        make install
+    )
+}
+
 function download_patch_build() {
     target=$1
     url=$2
@@ -113,67 +136,33 @@ function should_build() {
     test -z "$module_to_build" -o "$1" = "$module_to_build"
 }
 
-# binutils for i386
-if should_build "binutils"; then
-    download_and_patch "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2"
-    (
-        cd binutils-2.21.1
-        mkdir -p build
-        cd build
-        ../configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" --disable-nls --disable-werror
-        make
-        make install
-    )
-fi
+# # toolchain for i386
+# download_patch_build_host "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2" \
+#    --target="i386-linux-gnu" --disable-nls --disable-werror
+# download_patch_build_host "https://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.bz2"
+# download_patch_build_host "https://ftp.gnu.org/gnu/mpfr/mpfr-3.0.1.tar.bz2" --with-gmp="$HOST_PREFIX"
+# download_patch_build_host "https://ftp.gnu.org/gnu/mpc/mpc-1.0.3.tar.bz2" --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX"
+# 
+# # gcc for i386
+# if should_build "host_gcc"; then
+#     download_and_patch "https://ftp.gnu.org/gnu/gcc/gcc-4.5.2.tar.bz2"
+#     (
+#         cd gcc-4.5.2
+#         ./configure --target="i386-linux-gnu" --prefix="$HOST_PREFIX" \
+#             --disable-nls --disable-libmudflap --disable-libssp --disable-libgomp \
+#             --enable-languages=c,c++ --disable-multilib --without-ppl --without-cloog \
+#             --enable-clocale=gnu --enable-threads=posix --enable-__cxa_atexit \
+#             --disable-libstdcxx-pch --disable-bootstrap --with-gmp="$HOST_PREFIX" \
+#             --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX"
+#         make
+#         make install
+#     )
+# fi
 
-# gmp for i386
-if should_build "gmp"; then
-    download_and_patch "https://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.bz2"
-    (
-        cd gmp-5.0.1
-        ./configure --prefix="$HOST_PREFIX"
-        make
-        make install
-    )
-fi
-
-# mpfr for i386
-if should_build "mpfr"; then
-    download_and_patch "https://ftp.gnu.org/gnu/mpfr/mpfr-3.0.1.tar.bz2"
-    (
-        cd mpfr-3.0.1
-        ./configure --prefix="$HOST_PREFIX" --with-gmp="$HOST_PREFIX"
-        make
-        make install
-    )
-fi
-
-# mpc for i386
-if should_build "mpc"; then
-    download_and_patch "https://ftp.gnu.org/gnu/mpc/mpc-0.8.2.tar.bz2"
-    (
-        cd mpc-0.8.2
-        ./configure --prefix="$HOST_PREFIX" --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX"
-        make
-        make install
-    )
-fi
-
-# gcc for i386
-if should_build "gcc"; then
-    download_and_patch "https://ftp.gnu.org/gnu/gcc/gcc-4.5.2.tar.bz2"
-    (
-        cd gcc-4.5.2
-        ./configure --target="i386-linux-gnu" --prefix="$HOST_PREFIX" \
-            --disable-nls --disable-libmudflap --disable-libssp --disable-libgomp \
-            --enable-languages=c,c++ --disable-multilib --without-ppl --without-cloog \
-            --enable-clocale=gnu --enable-threads=posix --enable-__cxa_atexit \
-            --disable-libstdcxx-pch --disable-bootstrap --with-gmp="$HOST_PREFIX" \
-            --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX"
-        make
-        make install
-    )
-fi
+# need xsltproc for libxcb
+download_patch_build_host "https://zlib.net/zlib-1.2.11.tar.gz"
+download_patch_build_host "http://xmlsoft.org/sources/libxml2-2.9.12.tar.gz" --without-python
+download_patch_build_host "http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz" --without-python
 
 # kernel headers for glibc
 if should_build "linux-headers"; then
