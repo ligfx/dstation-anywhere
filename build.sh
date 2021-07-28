@@ -125,6 +125,7 @@ function relative_path() {
 
 function fix_runpaths() {
     (
+        mkdir -p "$HOST_PREFIX"/{bin,libexec}
         elf_files=$(find "$HOST_PREFIX"/{bin,libexec} -type f -exec sh -c "file {} | grep -i ': elf ' > /dev/null" \; -print)
         echo "$elf_files"
         IFS=$'\n'
