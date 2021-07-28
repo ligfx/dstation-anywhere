@@ -162,9 +162,6 @@ if should_build "host_gcc"; then
             --enable-languages=c --disable-multilib --disable-nls \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
             --with-sysroot="$SYSROOT" \
-            --disable-decimal-float --disable-libgomp --disable-libitm --disable-libquadmath \
-            --disable-libsanitizer --disable-libssp --disable-libvtv --disable-libcilkrts \
-            --disable-lto \
             # --enable-clocale=gnu --enable-threads=posix \
             # --disable-bootstrap \
         make all-gcc
