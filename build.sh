@@ -225,7 +225,7 @@ fi
 # libgcc
 # static libraries libgcc.a and libgcc_eh.a go to $HOST_PREFIX/lib/gcc/i686-linux-gnu/4.9.2 ?
 # shared library libgcc_s.so goes to $HOST_PREFIX/i686-linux-gnu/lib ?
-if should_build "libgcc"; then ( cd gcc-4.9.2/build && (make all-target-libgcc || (print_config_log; false)) && make install-target-libgcc ); fi
+if should_build "libgcc"; then ( cd gcc-4.9.2/build && make all-target-libgcc && make install-target-libgcc ); fi
 
 # glibc_final
 if should_build "glibc_final"; then ( cd glibc-2.13/build && make && make install ); fi
