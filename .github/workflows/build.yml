@@ -23,8 +23,6 @@ jobs:
     - run: ./build.sh host_mpc
     - run: ./build.sh linux-headers
     - run: ./build.sh host_gcc
-    - run: ldd toolchain/usr/bin/i686-linux-gnu-gcc
-    - run: ldd toolchain/usr/libexec/gcc/i686-linux-gnu/4.9.2/cc1
     - run: ./build.sh glibc_bootstrap
     - run: ./build.sh libgcc
     - run: ./build.sh glibc_final
