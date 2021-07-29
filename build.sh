@@ -127,7 +127,6 @@ function fix_runpaths() {
     (
         mkdir -p "$HOST_PREFIX"/{bin,libexec}
         elf_files=$(find "$HOST_PREFIX"/{bin,libexec} -type f -exec sh -c "file {} | grep -i ': elf ' > /dev/null" \; -print)
-        echo "$elf_files"
         IFS=$'\n'
         for f in $elf_files; do
             if test "$(basename "$f")" = "patchelf"; then
@@ -135,7 +134,7 @@ function fix_runpaths() {
             fi
             rpath=$(relative_path "$(dirname "$f")" "$HOST_PREFIX/lib")
             echo patchelf --set-rpath "$rpath" "$f"
-            patchelf --set-rpath "$rpath" "$f"
+            patchelf --set-rpath "\$ORIGIN/$rpath" "$f"
         done
     )
 }
