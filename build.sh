@@ -253,7 +253,8 @@ download_patch_build "https://www.x.org/releases/individual/lib/libXext-1.3.0.ta
 download_patch_build "https://www.x.org/releases/individual/lib/libXi-1.5.99.3.tar.bz2"
 
 # glib and gtk+
-download_patch_build "https://download.gnome.org/sources/glib/1.2/glib-1.2.10.tar.gz"
+download_patch_build "https://download.gnome.org/sources/glib/1.2/glib-1.2.10.tar.gz" \
+    CFLAGS="-std=gnu89"
 download_patch_build "https://download.gnome.org/sources/gtk+/1.2/gtk+-1.2.10.tar.gz" \
     --disable-glibtest --with-glib-prefix="$PREFIX" --with-x
 
