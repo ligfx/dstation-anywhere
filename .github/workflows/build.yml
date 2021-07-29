@@ -24,7 +24,7 @@ jobs:
     - run: ./build.sh linux-headers
     - run: ./build.sh host_gcc
     - run: ./build.sh glibc_bootstrap
-    - run: ./build.sh libgcc
+    - run: ./build.sh libgcc || (cat /home/runner/work/dstation-anywhere/dstation-anywhere/gcc-4.9.2/build/i686-linux-gnu/libgcc/config.log; false)
     - run: ./build.sh glibc_final
     - run: ./build.sh zlib
     - run: ./build.sh libpthread-stubs
