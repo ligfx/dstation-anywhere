@@ -187,7 +187,7 @@ if should_build "host_gcc"; then
             --enable-languages=c --disable-multilib --disable-nls \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
             --with-sysroot="$SYSROOT" --with-native-system-header-dir="/include" \
-            CXXFLAGS="-std=gnu++0x" \
+            CXXFLAGS="-std=gnu++0x" LDFLAGS="-Wl,-rpath=\"$HOST_PREFIX/lib\",--enable-new-dtags" \
             || ( print_config_log; false )
         make all-gcc
         make install-gcc

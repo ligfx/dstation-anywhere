@@ -23,6 +23,7 @@ jobs:
     - run: ./build.sh host_mpc
     - run: ./build.sh linux-headers
     - run: ./build.sh host_gcc
+    - run: readelf -d /home/runner/work/dstation-anywhere/dstation-anywhere/gcc-4.9.2/build/./gcc/cc1
     - run: ./build.sh glibc_bootstrap
     - run: ./build.sh libgcc || (cat /home/runner/work/dstation-anywhere/dstation-anywhere/gcc-4.9.2/build/i686-linux-gnu/libgcc/config.log; false)
     - run: ./build.sh glibc_final
