@@ -192,7 +192,10 @@ if should_build "host_gcc"; then
             --with-sysroot="$SYSROOT" --with-native-system-header-dir="/include" \
             CXXFLAGS="-std=gnu++0x" LDFLAGS="-Wl,-rpath=\"$HOST_PREFIX/lib\",--enable-new-dtags" \
             || ( print_config_log; false )
-        make all-gcc
+        # gcc looks for a limits.h to decide whether the gcc/include-fixed/limits.h
+        # header should be made to expect a libc-supplied limits.h or not. but since glibc
+        # hasn't been built yet, force GCC to expect a limits.h
+        make all-gcc LIMITS_H_TEST=true
         make install-gcc
     )
     fix_runpaths
