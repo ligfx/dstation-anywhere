@@ -159,6 +159,9 @@ function should_build() {
 download_patch_build_host "https://github.com/NixOS/patchelf/releases/download/0.12/patchelf-0.12.tar.bz2"
 
 # binutils for i686
+# binutils puts stuff into $HOST_PREFIX/i686-linux-gnu by default, which we're using for
+# our sysroot... we could change it by passing tooldir="$HOST_PREFIX/libexec/binutils/i686-linux-gnu"
+# to make and make install, but it's not a big issue.
 download_patch_build_host "https://ftp.gnu.org/gnu/binutils/binutils-2.21.1.tar.bz2" \
    --target="i686-linux-gnu" --disable-nls --disable-werror --disable-multilib \
    --with-sysroot="$SYSROOT"
