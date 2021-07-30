@@ -12,7 +12,7 @@ HOST_PREFIX="$topdir/toolchain/usr"
 export PATH="$HOST_PREFIX/bin:$PATH"
 
 SYSROOT="$HOST_PREFIX/i686-linux-gnu"
-PREFIX="$SYSROOT/usr"
+PREFIX="$SYSROOT"
 INCLUDEDIR="$PREFIX/include"
 LIBDIR="$PREFIX/lib"
 
@@ -186,7 +186,7 @@ if should_build "host_gcc"; then
         ../configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" \
             --enable-languages=c --disable-multilib --disable-nls \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
-            --with-sysroot="$SYSROOT" \
+            --with-sysroot="$SYSROOT" --with-native-system-header-dir="/include" \
             CXXFLAGS="-std=gnu++0x" LDFLAGS="-Wl,-rpath=\"$HOST_PREFIX/lib\",--enable-new-dtags" \
             || ( print_config_log; false )
         make all-gcc
