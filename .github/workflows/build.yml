@@ -46,11 +46,12 @@ jobs:
     - run: ./build.sh libxi
     - run: ./build.sh glib
     - run: ./build.sh gtk+
-    - run: ./build.sh libtool
     - run: ./build.sh alsa-lib
+    - run: ./build.sh libtool
     - run: ./build.sh libsndfile
     - run: ./build.sh pulseaudio
     - run: ./build.sh sdl
+    - run: ./build.sh sdl_mixer
     - run: ./build.sh lc2e
     - id: vars
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
