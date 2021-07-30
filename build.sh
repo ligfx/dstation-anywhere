@@ -293,7 +293,10 @@ if should_build "lc2e"; then
             log "Unpacking dockingstation_195_64..."
             rm -fr "dsbuild 195" ports cdtastic Readme.txt dstation-install
             find . -name '*.bz2' -exec bunzip2 {} \;
+            log "Removing unneeded files..."
             rm Readme.txt dstation-install libSDL-1.2.so.0 libSDL_mixer-1.2.so.0
+            log "Lowercasing filenames..."
+            sed -i.bak "s/DS_music.mng/ds_music.mng/" user.cfg && rm user.cfg.bak
             for d in Backgrounds Images "Overlay Data" Sounds; do
                 # lowercase the filenames
                 ( cd "$d" && for f in *; do test "$f" == "${f,,}" || mv "$f" "${f,,}"; done )
