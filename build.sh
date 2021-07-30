@@ -169,7 +169,7 @@ if should_build "linux-headers"; then
    (
        cd linux-2.6.39.4
        make mrproper
-       make headers_install ARCH="i386" INSTALL_HDR_PATH="$SYSROOT"
+       make headers_install ARCH="i386" INSTALL_HDR_PATH="$PREFIX"
    )
 fi
 
@@ -186,7 +186,7 @@ if should_build "host_gcc"; then
         ../configure --target="i686-linux-gnu" --prefix="$HOST_PREFIX" \
             --enable-languages=c --disable-multilib --disable-nls \
             --with-gmp="$HOST_PREFIX" --with-mpfr="$HOST_PREFIX" --with-mpc="$HOST_PREFIX" \
-            --with-sysroot="$SYSROOT" --with-native-system-header-dir="/include" \
+            --with-sysroot="$SYSROOT" \
             CXXFLAGS="-std=gnu++0x" LDFLAGS="-Wl,-rpath=\"$HOST_PREFIX/lib\",--enable-new-dtags" \
             || ( print_config_log; false )
         make all-gcc
@@ -205,19 +205,20 @@ if should_build "glibc_bootstrap"; then
         export CC="${CC} -g -march=i686 -mtune=generic -U_FORTIFY_SOURCE -w"
         # add libc_cv_forced_unwind=yes, libc_cv_c_cleanup=yes, and libc_cv_ctors_header=yes
         # because the test executables will fail to link, since we don't have libc yet! stupid
-        ../configure --prefix="$SYSROOT" --host="i686-linux-gnu" --disable-multilib \
+        ../configure --prefix="$PREFIX" --host="i686-linux-gnu" --disable-multilib \
             libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes libc_cv_ctors_header=yes \
             || ( print_config_log; false )
         # headers
         make install-bootstrap-headers=yes install-headers
-        install bits/stdio_lim.h "$SYSROOT/include/bits"
-        touch "$SYSROOT/include/gnu/stubs.h"
+        install bits/stdio_lim.h "$INCLUDEDIR/bits"
+        touch "$INCLUDEDIR/gnu/stubs.h"
         # startup files
         make csu/subdir_lib
-        install csu/crt1.o csu/crti.o csu/crtn.o "$SYSROOT/lib"
+        mkdir -p "$LIBDIR"
+        install csu/crt1.o csu/crti.o csu/crtn.o "$LIBDIR"
         # dummy libc that libgcc can link against
-        if ! test -e "$SYSROOT/lib/libc.so"; then
-            i686-linux-gnu-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o "$SYSROOT/lib/libc.so"
+        if ! test -e "$LIBDIR/libc.so"; then
+            i686-linux-gnu-gcc -nostdlib -nostartfiles -shared -x c /dev/null -o "$LIBDIR/libc.so"
         fi
     )
 fi
