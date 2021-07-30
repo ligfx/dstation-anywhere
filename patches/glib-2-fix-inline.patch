@@ -58,7 +58,7 @@
 +#ifndef G_INLINE_FUNC
 +#  define G_CAN_INLINE 1
 +#  define G_HAVE_INLINE 1
-+#  define G_INLINE_FUNC inline
++#  define G_INLINE_FUNC static inline
 +#endif
  
  /* Provide simple macro statement wrappers (adapted from Perl):
