@@ -54,10 +54,11 @@ jobs:
     - run: ./build.sh lc2e
     - id: vars
       run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+    - run: tar cf dstation-anywhere-${{ steps.vars.outputs.sha_short }}.tar.bz2 dockingstation_195_64
     - uses: actions/upload-artifact@v2
       with:
         name: dstation-anywhere-${{ steps.vars.outputs.sha_short }}
-        path: dockingstation_195_64
+        path: dstation-anywhere-${{ steps.vars.outputs.sha_short }}.tar.bz2
     - if: always()
       run: tar cf toolchain.tar.bz2 toolchain
     - uses: actions/upload-artifact@v2

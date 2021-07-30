@@ -193,8 +193,8 @@ if should_build "host_gcc"; then
             CXXFLAGS="-std=gnu++0x" LDFLAGS="-Wl,-rpath=\"$HOST_PREFIX/lib\",--enable-new-dtags" \
             || ( print_config_log; false )
         # gcc looks for a limits.h to decide whether the gcc/include-fixed/limits.h
-        # header should be made to expect a libc-supplied limits.h or not. but since glibc
-        # hasn't been built yet, force GCC to expect a limits.h
+        # header should be made to expect a libc-supplied limits.h or not. but since
+        # libc hasn't been built yet, explicitly force GCC to expect a limits.h
         make all-gcc LIMITS_H_TEST=true
         make install-gcc
     )
